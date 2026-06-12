@@ -356,7 +356,7 @@ with tab3:
 <div class="info-block">
   <div class="info-block-title">Origenes en Grecia antigua</div>
   <p>
-    Las inecuaciones surgieron hace mas de 2.000 anos en la antigua Grecia.
+    Las inecuaciones surgieron en la antigua Grecia.
     Matematicos como Euclides y Arquimedes las utilizaban para comparar longitudes,
     areas y volumenes cuando necesitaban saber si una cantidad era mayor o menor que otra,
     sin requerir un valor exacto.
@@ -380,7 +380,7 @@ with tab4:
   <div class="info-block-title">El origen de los simbolos</div>
   <p>
     Los simbolos &lt; y &gt; fueron introducidos por el matematico ingles
-    <strong>Thomas Harriot</strong> en el ano 1631, en su obra <em>Artis Analyticae Praxis</em>.
+    <strong>Thomas Harriot</strong> en 1631, en su obra <em>Artis Analyticae Praxis</em>.
     Antes de su propuesta, los matematicos usaban palabras o notaciones mucho mas largas
     para expresar comparaciones entre cantidades.
   </p>
