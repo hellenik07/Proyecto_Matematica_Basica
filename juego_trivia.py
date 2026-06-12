@@ -634,15 +634,27 @@ def mostrar_juego():
 </div>""", unsafe_allow_html=True)
     st.progress(paso_global / 6)
 
-    # ── BOTÓN HUIR (pequeño, discreto) ──
-    col_huir, col_esp = st.columns([1.4, 4])
+    # ── FILA: Cambiar nivel + Comodín (misma línea) ──
+    ya_respondido = st.session_state.resultado is not None
+    correcto      = st.session_state.resultado == "correcto"
+
+    col_huir, col_comodin, col_esp = st.columns([1.4, 1.9, 2.7])
     with col_huir:
         if st.button("⬅ Cambiar nivel", key="back_nivel"):
             st.session_state.nivel = None; st.rerun()
+    with col_comodin:
+        if not ya_respondido and st.session_state.comodines > 0 and st.session_state.opcion_oculta is None:
+            if st.button(f"🃏 Comodín ({st.session_state.comodines} restante{'s' if st.session_state.comodines > 1 else ''})", key="comodin"):
+                paso_key_c = (nivel, ineq_idx, paso_idx)
+                if st.session_state.opciones_shuffle and st.session_state.opciones_shuffle.get("key") == paso_key_c:
+                    _usar_comodin(st.session_state.opciones_shuffle["opciones"], st.session_state.opciones_shuffle["correcta"])
+                st.rerun()
+        elif st.session_state.comodines == 0:
+            st.markdown("<span style='color:#94A3B8;font-size:0.82rem;font-weight:700;padding-top:8px;display:inline-block;'>🃏 Sin comodines</span>", unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # ── INECUACIÓN + DOTS en la misma línea ──
+    # ── DOTS + TÍTULO ──
     dots = "".join(
         "<div class='paso-dot"
         + (" paso-dot-done'" if d < paso_idx else " paso-dot-active'" if d == paso_idx else "'")
@@ -651,39 +663,27 @@ def mostrar_juego():
     )
     st.markdown(
         f"<div class='paso-dot-row'>{dots}"
-        f"<span style='font-size:0.68rem;color:#94A3B8;margin-left:5px;font-weight:800;'>"
+        f"<span style='font-size:0.78rem;color:#94A3B8;margin-left:5px;font-weight:800;'>"
         f"Paso {paso['num']} de {total_p} · {ineq['titulo']}</span></div>",
         unsafe_allow_html=True,
     )
 
-    ya_respondido = st.session_state.resultado is not None
-    correcto      = st.session_state.resultado == "correcto"
     ecuacion_display = paso["expresion"] if (ya_respondido and correcto) else paso["expresion_dinamica"]
 
-    # ── ECUACIÓN + PREGUNTA LADO A LADO ──
-    col_eq, col_q = st.columns([1, 1.6])
-    with col_eq:
+    # ── ECUACIÓN CENTRADA + PREGUNTA DEBAJO ──
+    col_l, col_center, col_r = st.columns([0.5, 3, 0.5])
+    with col_center:
         st.markdown(f"""
-<div class="ineq-card">
+<div class="ineq-card" style="text-align:center;">
   <span class="ineq-badge">{ineq_idx + 1}/2 · {paso['descripcion']}</span>
 """, unsafe_allow_html=True)
         st.latex(ecuacion_display)
         st.markdown("</div>", unsafe_allow_html=True)
-
-    with col_q:
         st.markdown(
-            f"<p style='font-weight:700;font-size:0.95rem;color:#1E293B!important;"
-            f"margin-top:8px;line-height:1.5;'>{paso['pregunta']}</p>",
+            f"<p style='font-weight:700;font-size:1.06rem;color:#1E293B!important;"
+            f"margin-top:6px;line-height:1.55;text-align:center;'>{paso['pregunta']}</p>",
             unsafe_allow_html=True,
         )
-
-        # Comodín dentro de la columna de pregunta
-        if not ya_respondido and st.session_state.comodines > 0 and st.session_state.opcion_oculta is None:
-            if st.button(f"🃏 Usar comodín ({st.session_state.comodines} restante{'s' if st.session_state.comodines > 1 else ''})", key="comodin"):
-                paso_key = (nivel, ineq_idx, paso_idx)
-                if st.session_state.opciones_shuffle and st.session_state.opciones_shuffle.get("key") == paso_key:
-                    _usar_comodin(st.session_state.opciones_shuffle["opciones"], st.session_state.opciones_shuffle["correcta"])
-                st.rerun()
 
     # ── OPCIONES ──
     paso_key = (nivel, ineq_idx, paso_idx)
