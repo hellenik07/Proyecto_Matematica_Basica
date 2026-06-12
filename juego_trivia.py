@@ -450,6 +450,13 @@ def mostrar_juego():
     # PANTALLA DE INICIO
     # ══════════════════════════════════════════════════════
     if st.session_state.nivel is None:
+        # AQUÍ ESTÁ EL NUEVO BOTÓN DE REGRESAR
+        col_back, _ = st.columns([1, 4])
+        with col_back:
+            if st.button("Regresar al Inicio", use_container_width=True):
+                st.session_state.pagina = "home"
+                st.rerun()
+
         st.markdown("<p class='eyebrow'>Aventura Matemática</p>", unsafe_allow_html=True)
         st.markdown("<h1>Misión: Rescatar a Gauss</h1>", unsafe_allow_html=True)
 

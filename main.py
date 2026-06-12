@@ -215,44 +215,34 @@ hr {
 }
 
 /* ── Botones ── */
-.stButton > button {
+div.stButton > button {
     font-family: 'Nunito', sans-serif !important;
     font-weight: 800 !important;
     font-size: 0.93rem !important;
     border-radius: 8px !important;
     padding: 11px 20px !important;
     width: 100% !important;
-    transition: all 0.14s ease !important;
+    transition: all 0.2s ease !important;
     cursor: pointer !important;
-    letter-spacing: 0.01em !important;
+    background-color: #FAF6F0 !important; /* Color Crema constante */
+    color: #8B0000 !important;             /* Texto Vino */
+    border: 2px solid #8B0000 !important;  /* Borde Vino */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05) !important;
 }
 
-/* Botón izquierdo — outline */
-div[data-testid="column"]:first-child .stButton > button {
-    background-color: #FFFFFF !important;
-    color: #8B0000 !important;
-    border: 1.5px solid #8B0000 !important;
-    box-shadow: none !important;
-}
-div[data-testid="column"]:first-child .stButton > button:hover {
+div.stButton > button:hover {
     background-color: #8B0000 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 4px 14px rgba(139,0,0,0.18) !important;
+    border: 2px solid #8B0000 !important;
+    box-shadow: 0 4px 12px rgba(139,0,0,0.2) !important;
     transform: translateY(-1px) !important;
 }
 
-/* Botón derecho — relleno rojo vino */
-div[data-testid="column"]:last-child .stButton > button {
+/* Evita que Streamlit aplique gris oscuro al hacer clic o seleccionar */
+div.stButton > button:active, div.stButton > button:focus {
     background-color: #8B0000 !important;
     color: #FFFFFF !important;
-    border: 1.5px solid #8B0000 !important;
-    box-shadow: 0 2px 8px rgba(139,0,0,0.15) !important;
-}
-div[data-testid="column"]:last-child .stButton > button:hover {
-    background-color: #6F0000 !important;
-    border-color: #6F0000 !important;
-    box-shadow: 0 4px 14px rgba(139,0,0,0.28) !important;
-    transform: translateY(-1px) !important;
+    border-color: #8B0000 !important;
 }
 </style>
 """, unsafe_allow_html=True)
