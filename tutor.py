@@ -7,7 +7,7 @@ import html
 # FUNCIÓN PRINCIPAL LLAMADA POR MAIN.PY
 # ==========================================
 def mostrar_tutor():
-    # Estilos CSS movidos aquí adentro para mantener consistencia
+    # Estilos CSS blindados contra el tema oscuro de Streamlit
     st.markdown("""
     <style>
         /* Ocultar elementos nativos de Streamlit */
@@ -23,7 +23,7 @@ def mostrar_tutor():
 
         /* MainCard: La tarjeta flotante central */
         .block-container {
-            background-color: #FAF6F0; /* Tono crema dominante */
+            background-color: #FAF6F0; 
             border: 1px solid #cbd5e1;
             border-radius: 24px;
             padding: 35px 45px !important;
@@ -33,9 +33,9 @@ def mostrar_tutor():
             max-width: 1000px;
         }
 
-        /* Modificando la barra lateral (RightPanel) */
+        /* Modificando la barra lateral */
         [data-testid="stSidebar"] {
-            background-color: #FAF6F0 !important; /* Tono crema dominante */
+            background-color: #FAF6F0 !important; 
             border-left: 1px solid #cbd5e1;
             box-shadow: -8px 0 25px rgba(0,0,0,0.05);
         }
@@ -51,11 +51,11 @@ def mostrar_tutor():
             font-family: 'Consolas', monospace;
         }
 
-        /* Estilo de botones superiores (HeaderButton) */
+        /* Estilo de botones superiores */
         div.stButton > button {
-            background-color: #FAF6F0; /* Tono crema dominante */
-            color: #0f172a;
-            border: 1px solid #cbd5e1;
+            background-color: #FAF6F0 !important; 
+            color: #8B0000 !important;
+            border: 1px solid #8B0000 !important;
             border-radius: 12px;
             font-weight: bold;
             font-family: sans-serif;
@@ -64,23 +64,23 @@ def mostrar_tutor():
             width: 100%;
         }
         div.stButton > button:hover {
-            background-color: #8B0000;
-            color: white;
-            border-color: #8B0000;
+            background-color: #8B0000 !important;
+            color: white !important;
+            border-color: #8B0000 !important;
         }
 
         /* Estilo Botón CTA (Comenzar Práctica) */
         div.stButton > button[kind="primary"] {
-            background-color: #8B0000;
-            color: white;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(139,0,0,0.3);
-            height: 55px;
-            font-size: 18px;
+            background-color: #8B0000 !important;
+            color: white !important;
+            border-radius: 12px !important;
+            border: none !important;
+            box-shadow: 0 5px 15px rgba(139,0,0,0.3) !important;
+            height: 55px !important;
+            font-size: 18px !important;
         }
         div.stButton > button[kind="primary"]:hover {
-            background-color: #b91c1c;
+            background-color: #b91c1c !important;
         }
 
         /* ELIMINAR EL FONDO OSCURO INFERIOR NATIVO DE STREAMLIT */
@@ -91,47 +91,65 @@ def mostrar_tutor():
             background-color: transparent !important;
         }
 
-        /* UPLOADER MINIMALISTA (Adiós a la franja gris gigante) */
+        /* UPLOADER MINIMALISTA (Corrección del botón negro) */
         [data-testid="stFileUploader"] {
             padding: 0 !important;
         }
         [data-testid="stFileUploader"] section {
             padding: 5px 15px !important;
-            border: 1px solid #cbd5e1 !important; /* Borde limpio, nada de dashed */
+            border: 1px solid #cbd5e1 !important; 
             border-radius: 12px !important;
             background-color: #FAF6F0 !important;
         }
         [data-testid="stFileUploaderDropzoneInstructions"],
         [data-testid="stFileUploader"] small,
         [data-testid="stFileUploader"] svg {
-            display: none !important; /* Oculta textos e ícono de nube */
+            display: none !important; 
+        }
+        /* Botón interno de Browse Files */
+        [data-testid="stFileUploader"] button {
+            background-color: #FAF6F0 !important;
+            color: #8B0000 !important;
+            border: 1.5px solid #8B0000 !important;
+            border-radius: 8px !important;
+        }
+        [data-testid="stFileUploader"] button:hover {
+            background-color: #8B0000 !important;
+            color: #FFFFFF !important;
         }
 
-        /* InputWrapper nativo de Streamlit (Chat Input) */
+        /* CHAT INPUT (Corrección total del fondo oscuro) */
         [data-testid="stChatInput"] {
-            background-color: #64748b !important; /* Tono claro (Slate 500) para contraste del blanco */
-            border: 1px solid #cbd5e1 !important; /* Sin rastro del borde rojo inicial */
+            background-color: transparent !important; 
+            border: none !important;
+        }
+        [data-testid="stChatInput"] > div {
+            background-color: #FFFFFF !important; /* Fondo blanco limpio */
+            border: 2px solid #CBD5E1 !important; /* Borde gris sutil */
             border-radius: 20px !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
         }
-        [data-testid="stChatInput"]:focus-within {
-            border-color: #cbd5e1 !important; /* Mantiene el borde neutro al escribir, NADA ROJO */
+        [data-testid="stChatInput"]:focus-within > div {
+            border-color: #8B0000 !important; /* Borde rojo vino al escribir */
         }
         [data-testid="stChatInput"] textarea {
-            color: #ffffff !important;
+            color: #0F172A !important; /* Texto oscuro para que se vea */
             font-size: 16px !important;
+            background-color: #FFFFFF !important; /* Fondo forzado a blanco */
+            -webkit-text-fill-color: #0F172A !important;
         }
         [data-testid="stChatInput"] textarea::placeholder {
-            color: #ffffff !important; /* Placeholder blanco inmaculado */
-            opacity: 0.9 !important;
+            color: #64748B !important; /* Gris oscuro para el placeholder */
+            -webkit-text-fill-color: #64748B !important;
+            opacity: 1 !important;
         }
-        /* Flecha siempre rojo #8B0000, sin opacidad (no se pone oscura) */
+        /* Flecha de enviar */
         [data-testid="stChatInputSubmitButton"] {
-            color: #8B0000 !important;
-            opacity: 1 !important; /* Forzar 100% de luz siempre */
+            background-color: transparent !important;
+            border: none !important;
         }
         [data-testid="stChatInputSubmitButton"] svg {
-            fill: #8B0000 !important;
+            fill: #8B0000 !important; /* Flecha rojo vino */
         }
     </style>
     """, unsafe_allow_html=True)
@@ -217,9 +235,10 @@ def mostrar_tutor():
 
 
     # ==========================================
-    # UI: HEADER
+    # UI: HEADER (Con columnas ajustadas para que no se corte el título)
     # ==========================================
-    col_back, col_logo, col_btn1, col_btn2, col_btn3, col_btn4 = st.columns([1, 1.5, 1, 1, 1, 1])
+    # Ajusté la segunda columna (col_logo) a 2.2 para darle más espacio al título
+    col_back, col_logo, col_btn1, col_btn2, col_btn3, col_btn4 = st.columns([0.8, 2.2, 1, 1, 1, 1])
 
     with col_back:
         if st.button("⬅ Inicio"):
@@ -227,7 +246,8 @@ def mostrar_tutor():
             st.rerun()
 
     with col_logo:
-        st.markdown("<h1 style='color: #8B0000; margin-top: -15px; font-weight: bold;'>MathSolve.</h1>", unsafe_allow_html=True)
+        # white-space: nowrap previene que la palabra baje a otra línea
+        st.markdown("<h1 style='color: #8B0000; margin-top: -15px; font-weight: bold; white-space: nowrap; font-size: 34px;'>MathSolve.</h1>", unsafe_allow_html=True)
 
     with col_btn1:
         if st.button("Módulo Teórico"):
