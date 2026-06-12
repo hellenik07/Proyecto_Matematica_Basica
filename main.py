@@ -7,11 +7,11 @@ import tutor
 # ══════════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="MathSolve — Inecuaciones",
-    layout="wide", 
+    layout="wide", # ¡Cambio clave para aprovechar la pantalla completa!
 )
 
 # ══════════════════════════════════════════════════════════════
-# CSS GLOBAL (Sincronizado y adaptado para Sidebar)
+# CSS GLOBAL
 # ══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -28,17 +28,9 @@ section.main,
     color: #1A1A1A !important;
 }
 .main .block-container {
-    max-width: 1100px !important; 
+    max-width: 1100px !important; /* Liberamos el ancho para que ocupe el espacio */
     padding-top: 2.2rem !important;
     padding-bottom: 3rem !important;
-}
-
-/* ── Barra Lateral (Sidebar Estática) ── */
-[data-testid="stSidebar"] {
-    background-color: #FAF6F0 !important; 
-    border-right: 1px solid #CBD5E1 !important;
-    box-shadow: 4px 0 15px rgba(0,0,0,0.05) !important;
-    padding-top: 2rem !important;
 }
 
 /* ── Cabecera de la app ── */
@@ -116,7 +108,12 @@ hr {
     font-weight: 800 !important;
 }
 
-/* ── Bloques de contenido ── */
+/* ── Contenido pestañas ── */
+[data-testid="stTabsContent"] {
+    padding-top: 1.6rem !important;
+}
+
+/* ── Bloques de contenido dentro de las pestañas ── */
 .info-block {
     background: #FFFFFF;
     border: 1px solid #E2DDD8;
@@ -152,6 +149,7 @@ hr {
     padding: 1px 0 !important;
 }
 
+/* ── Highlight chip (dato destacado) ── */
 .dato-chip {
     display: inline-block;
     background: #FFF0EE;
@@ -165,67 +163,82 @@ hr {
     font-family: 'Space Mono', monospace;
 }
 
-/* ── Tarjetas de Módulos (Estilo Fijo en Sidebar) ── */
-.modulo-sidebar-card {
+/* ── Etiqueta de sección ── */
+.section-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8B0000;
+    margin-bottom: 14px;
+    display: block;
+}
+
+/* ── Tarjetas de módulos ── */
+.modulo-card {
     background: #FFFFFF;
-    border: 1px solid #CBD5E1;
+    border: 1px solid #E2DDD8;
     border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+    padding: 20px 20px 16px;
     position: relative;
     overflow: hidden;
+    transition: all 0.18s ease;
 }
-.modulo-sidebar-card::before {
+.modulo-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
     background: #8B0000;
+    border-radius: 12px 12px 0 0;
 }
-.modulo-label {
-    font-size: 0.6rem;
+.modulo-card-label {
+    font-size: 0.62rem;
     font-weight: 800;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #8B0000;
-    margin-bottom: 2px;
-}
-.modulo-name {
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: #0F172A;
     margin-bottom: 4px;
 }
-.modulo-desc {
-    font-size: 0.78rem;
+.modulo-card-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 6px;
+}
+.modulo-card-desc {
+    font-size: 0.83rem;
     color: #6B7280;
-    line-height: 1.4;
-    margin-bottom: 10px;
+    line-height: 1.5;
+    font-weight: 400;
+    margin-bottom: 14px;
 }
 
 /* ── Botones ── */
 div.stButton > button {
     font-family: 'Nunito', sans-serif !important;
     font-weight: 800 !important;
-    font-size: 0.88rem !important;
+    font-size: 0.93rem !important;
     border-radius: 8px !important;
-    padding: 8px 16px !important;
+    padding: 11px 20px !important;
     width: 100% !important;
     transition: all 0.2s ease !important;
     cursor: pointer !important;
-    background-color: #FAF6F0 !important;
-    color: #8B0000 !important;
-    border: 1.5px solid #8B0000 !important;
+    background-color: #FAF6F0 !important; /* Color Crema constante */
+    color: #8B0000 !important;             /* Texto Vino */
+    border: 2px solid #8B0000 !important;  /* Borde Vino */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05) !important;
 }
 
 div.stButton > button:hover {
     background-color: #8B0000 !important;
     color: #FFFFFF !important;
-    border: 1.5px solid #8B0000 !important;
+    border: 2px solid #8B0000 !important;
+    box-shadow: 0 4px 12px rgba(139,0,0,0.2) !important;
     transform: translateY(-1px) !important;
 }
 
+/* Evita que Streamlit aplique gris oscuro al hacer clic o seleccionar */
 div.stButton > button:active, div.stButton > button:focus {
     background-color: #8B0000 !important;
     color: #FFFFFF !important;
@@ -234,44 +247,13 @@ div.stButton > button:active, div.stButton > button:focus {
 </style>
 """, unsafe_allow_html=True)
 
+
 # ══════════════════════════════════════════════════════════════
 # ESTADO DE NAVEGACIÓN
 # ══════════════════════════════════════════════════════════════
 if "pagina" not in st.session_state:
     st.session_state.pagina = "home"
 
-# ══════════════════════════════════════════════════════════════
-# BARRA LATERAL ESTÁTICA (Acceso a Módulos estilo Nubes)
-# ══════════════════════════════════════════════════════════════
-with st.sidebar:
-    st.markdown("<h2 style='color: #8B0000; margin-top: -10px; font-size: 1.25rem;'>Acceso a Módulos</h2>", unsafe_allow_html=True)
-    st.markdown("<hr style='margin: 10px 0 20px 0 !important;'>", unsafe_allow_html=True)
-    
-    # Módulo 1: Práctica
-    st.markdown("""
-    <div class="modulo-sidebar-card">
-        <div class="modulo-label">Módulo de práctica</div>
-        <div class="modulo-name">Rescatar a Gauss</div>
-        <div class="modulo-desc">Resuelve inecuaciones paso a paso en un formato interactivo con vidas y comodines.</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Ir al juego", key="side_juego", use_container_width=True):
-        st.session_state.pagina = "juego"
-        st.rerun()
-        
-    st.markdown("<div style='height:15px;'></div>", unsafe_allow_html=True)
-    
-    # Módulo 2: Tutor
-    st.markdown("""
-    <div class="modulo-sidebar-card">
-        <div class="modulo-label">Tutor Inteligente</div>
-        <div class="modulo-name">Tutor MathSolve</div>
-        <div class="modulo-desc">Resuelve inecuaciones con asistencia inteligente y retroalimentación inmediata.</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Ir al tutor", key="side_tutor", use_container_width=True):
-        st.session_state.pagina = "tutor"
-        st.rerun()
 
 # ══════════════════════════════════════════════════════════════
 # ENRUTAMIENTO
@@ -284,8 +266,9 @@ if st.session_state.pagina == "tutor":
     tutor.mostrar_tutor()
     st.stop()
 
+
 # ══════════════════════════════════════════════════════════════
-# PÁGINA PRINCIPAL (HOME)
+# PÁGINA PRINCIPAL
 # ══════════════════════════════════════════════════════════════
 
 # ── Cabecera ──────────────────────────────────────────────────
@@ -296,6 +279,7 @@ st.markdown("""
   <div class="app-tagline">Plataforma educativa interactiva para el aprendizaje de inecuaciones</div>
 </div>
 """, unsafe_allow_html=True)
+
 
 # ── Pestañas ──────────────────────────────────────────────────
 tab1, tab2, tab3, tab4 = st.tabs([
@@ -400,3 +384,36 @@ with tab4:
     st.markdown("""
 <div class="dato-chip">1631 — Thomas Harriot introduce &lt; y &gt;</div>
 """, unsafe_allow_html=True)
+
+
+# ── Separador y módulos ───────────────────────────────────────
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<span class='section-label'>Acceso a modulos</span>", unsafe_allow_html=True)
+
+col_izq, col_der = st.columns(2, gap="medium")
+
+with col_izq:
+    st.markdown("""
+<div class="modulo-card">
+  <div class="modulo-card-label">Modulo de practica</div>
+  <div class="modulo-card-name">Rescatar a Gauss</div>
+  <div class="modulo-card-desc">Resuelve inecuaciones paso a paso en un formato de juego interactivo con vidas y comodines.</div>
+</div>
+<div style="height:10px"></div>
+""", unsafe_allow_html=True)
+    if st.button("Ir al juego", key="btn_juego", use_container_width=True):
+        st.session_state.pagina = "juego"
+        st.rerun()
+
+with col_der:
+    st.markdown("""
+<div class="modulo-card">
+  <div class="modulo-card-label">Tutor inteligente</div>
+  <div class="modulo-card-name">Tutor MathSolve</div>
+  <div class="modulo-card-desc">Resuelve inecuaciones con asistencia inteligente y retroalimentacion inmediata.</div>
+</div>
+<div style="height:10px"></div>
+""", unsafe_allow_html=True)
+    if st.button("Ir al tutor", key="btn_tutor", use_container_width=True):
+        st.session_state.pagina = "tutor"
+        st.rerun()
