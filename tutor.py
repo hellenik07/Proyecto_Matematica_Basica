@@ -7,7 +7,7 @@ import html
 # FUNCIÓN PRINCIPAL LLAMADA POR MAIN.PY
 # ==========================================
 def mostrar_tutor():
-    # Estilos CSS blindados contra el tema oscuro de Streamlit
+    # Estilos CSS blindados contra el tema oscuro de Streamlit y ajustes de layout
     st.markdown("""
     <style>
         /* Ocultar elementos nativos de Streamlit */
@@ -26,10 +26,10 @@ def mostrar_tutor():
             background-color: #FAF6F0; 
             border: 1px solid #cbd5e1;
             border-radius: 24px;
-            padding: 35px 45px !important;
+            padding: 25px 45px 15px 45px !important;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
-            margin-bottom: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
             max-width: 1000px;
         }
 
@@ -91,39 +91,41 @@ def mostrar_tutor():
             background-color: transparent !important;
         }
 
-        /* UPLOADER MINIMALISTA (Corrección del botón negro) */
+        /* ── UPLOADER MINIMALISTA (ADIÓS A LA CAJA GRIS) ── */
         [data-testid="stFileUploader"] {
             padding: 0 !important;
-        }
-        [data-testid="stFileUploader"] section {
-            padding: 5px 15px !important;
-            border: 1px solid #cbd5e1 !important; 
-            border-radius: 12px !important;
-            background-color: #FAF6F0 !important;
         }
         [data-testid="stFileUploaderDropzoneInstructions"],
         [data-testid="stFileUploader"] small,
         [data-testid="stFileUploader"] svg {
-            display: none !important; 
+            display: none !important; /* Oculta textos e ícono de nube y caja */
+        }
+        [data-testid="stFileUploader"] > section {
+            background-color: transparent !important; /* Quita el fondo */
+            border: none !important; /* Quita el borde gris gigante */
+            padding: 0 !important;
         }
         /* Botón interno de Browse Files */
         [data-testid="stFileUploader"] button {
             background-color: #FAF6F0 !important;
             color: #8B0000 !important;
             border: 1.5px solid #8B0000 !important;
-            border-radius: 8px !important;
+            border-radius: 20px !important; /* Botón en forma de píldora */
+            font-weight: bold !important;
+            padding: 2px 20px !important;
         }
         [data-testid="stFileUploader"] button:hover {
             background-color: #8B0000 !important;
             color: #FFFFFF !important;
         }
 
-        /* CHAT INPUT (Corrección total del fondo oscuro) */
+        /* ── CHAT INPUT BLINDADO ANTI-MODO-OSCURO ── */
         [data-testid="stChatInput"] {
             background-color: transparent !important; 
             border: none !important;
         }
-        [data-testid="stChatInput"] > div {
+        [data-testid="stChatInput"] > div,
+        [data-testid="stChatInputContainer"] {
             background-color: #FFFFFF !important; /* Fondo blanco limpio */
             border: 2px solid #CBD5E1 !important; /* Borde gris sutil */
             border-radius: 20px !important;
@@ -131,11 +133,12 @@ def mostrar_tutor():
         }
         [data-testid="stChatInput"]:focus-within > div {
             border-color: #8B0000 !important; /* Borde rojo vino al escribir */
+            box-shadow: 0 0 0 1px #8B0000 !important;
         }
         [data-testid="stChatInput"] textarea {
             color: #0F172A !important; /* Texto oscuro para que se vea */
             font-size: 16px !important;
-            background-color: #FFFFFF !important; /* Fondo forzado a blanco */
+            background-color: #FFFFFF !important; /* Forzar blanco */
             -webkit-text-fill-color: #0F172A !important;
         }
         [data-testid="stChatInput"] textarea::placeholder {
@@ -143,10 +146,10 @@ def mostrar_tutor():
             -webkit-text-fill-color: #64748B !important;
             opacity: 1 !important;
         }
-        /* Flecha de enviar */
+        /* Botón/Flecha de enviar */
         [data-testid="stChatInputSubmitButton"] {
-            background-color: transparent !important;
-            border: none !important;
+            background-color: #FAF6F0 !important;
+            border-radius: 50% !important;
         }
         [data-testid="stChatInputSubmitButton"] svg {
             fill: #8B0000 !important; /* Flecha rojo vino */
@@ -235,10 +238,10 @@ def mostrar_tutor():
 
 
     # ==========================================
-    # UI: HEADER (Con columnas ajustadas para que no se corte el título)
+    # UI: HEADER (ESTÁTICO Y SIN CORTES)
     # ==========================================
-    # Ajusté la segunda columna (col_logo) a 2.2 para darle más espacio al título
-    col_back, col_logo, col_btn1, col_btn2, col_btn3, col_btn4 = st.columns([0.8, 2.2, 1, 1, 1, 1])
+    # Ajusté las proporciones para que MathSolve quepa perfectamente.
+    col_back, col_logo, col_btn1, col_btn2, col_btn3, col_btn4 = st.columns([1.2, 3.2, 1.2, 1, 1, 1])
 
     with col_back:
         if st.button("⬅ Inicio"):
@@ -246,8 +249,7 @@ def mostrar_tutor():
             st.rerun()
 
     with col_logo:
-        # white-space: nowrap previene que la palabra baje a otra línea
-        st.markdown("<h1 style='color: #8B0000; margin-top: -15px; font-weight: bold; white-space: nowrap; font-size: 34px;'>MathSolve.</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='color: #8B0000; margin-top: -15px; font-weight: bold; white-space: nowrap; font-size: 32px;'>MathSolve.</h1>", unsafe_allow_html=True)
 
     with col_btn1:
         if st.button("Módulo Teórico"):
@@ -266,7 +268,7 @@ def mostrar_tutor():
             st.session_state.history = []
             st.rerun()
 
-    st.markdown("<hr style='margin-top: 0; border-color: #cbd5e1;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin-top: 0; margin-bottom: 10px; border-color: #cbd5e1;'>", unsafe_allow_html=True)
 
 
     # ==========================================
@@ -300,70 +302,84 @@ def mostrar_tutor():
     # VISTA 1: TEORÍA
     # ==========================================
     if st.session_state.page == "teoria":
-        st.markdown("""
-        <div style='text-align: center; padding: 20px;'>
-            <div style='display: inline-block; border: 2px solid #8B0000; border-radius: 15px; padding: 5px 15px; margin-bottom: 20px;'>
-                <span style='color: #8B0000; font-weight: bold; font-size: 12px;'>MÓDULO: INECUACIONES</span>
+        # Se envuelve en un contenedor para que también respete el layout sin bajar la cabecera
+        with st.container(height=450, border=False):
+            st.markdown("""
+            <div style='text-align: center; padding: 20px;'>
+                <div style='display: inline-block; border: 2px solid #8B0000; border-radius: 15px; padding: 5px 15px; margin-bottom: 20px;'>
+                    <span style='color: #8B0000; font-weight: bold; font-size: 12px;'>MÓDULO: INECUACIONES</span>
+                </div>
+                <h1 style='color: #0f172a; font-size: 42px; margin-bottom: 20px;'>Desigualdades y Conjuntos</h1>
+                <p style='color: #475569; font-size: 18px; line-height: 1.6; max-width: 700px; margin: 0 auto;'>
+                    <b>Concepto Básico:</b><br>
+                    Una inecuación es una desigualdad algebraica. Aquí buscamos un conjunto de valores (un intervalo) que cumpla con la condición de ser mayor o menor.<br><br>
+                    <b>Reglas de Oro del Despeje:</b><br>
+                    Se resuelven casi idénticamente a las ecuaciones lineales, pero con una regla irrompible: ¡Si multiplicas o divides por un número negativo, el sentido de la desigualdad se invierte!
+                </p>
             </div>
-            <h1 style='color: #0f172a; font-size: 42px; margin-bottom: 20px;'>Desigualdades y Conjuntos</h1>
-            <p style='color: #475569; font-size: 18px; line-height: 1.6; max-width: 700px; margin: 0 auto;'>
-                <b>Concepto Básico:</b><br>
-                Una inecuación es una desigualdad algebraica. Aquí buscamos un conjunto de valores (un intervalo) que cumpla con la condición de ser mayor o menor.<br><br>
-                <b>Reglas de Oro del Despeje:</b><br>
-                Se resuelven casi idénticamente a las ecuaciones lineales, pero con una regla irrompible: ¡Si multiplicas o divides por un número negativo, el sentido de la desigualdad se invierte!
-            </p>
-        </div>
-        <br>
-        """, unsafe_allow_html=True)
-       
-        col_space1, col_btn, col_space2 = st.columns([1, 1.5, 1])
-        with col_btn:
-            if st.button("Comenzar Práctica  ➔", type="primary", use_container_width=True):
-                st.session_state.page = "practica"
-                if not st.session_state.history:
-                    st.session_state.history.append({
-                        "role": "assistant",
-                        "content": "¡Hola! Soy tu Tutor Virtual de Inecuaciones. Ingresa una expresión para empezar (ej. -3x + 5 ≤ 20).",
-                        "is_image": False
-                    })
-                st.rerun()
-
-    # ==========================================
-    # VISTA 2: PRÁCTICA
-    # ==========================================
-    elif st.session_state.page == "practica":
-       
-        for msg in st.session_state.history:
-            render_chat_bubble(msg["role"], msg["content"], msg.get("image_b64"))
-
-        # Botón flotante para guardar el último insight
-        if len(st.session_state.history) > 0 and st.session_state.history[-1]["role"] == "assistant":
-            col_space, col_save = st.columns([4, 1])
-            with col_save:
-                if st.button("☁️ Guardar Nube"):
-                    is_first_cloud = len(st.session_state.clouds) == 0
-                    st.session_state.clouds.append(st.session_state.history[-1]["content"])
-                   
-                    # Aquí está la lógica de la notificación de primera nube
-                    if is_first_cloud:
-                        st.toast("¡Primer insight guardado! ☁️ Haz clic en el botón 'Mis Nubes ☁️' de arriba para repasar.")
-                    else:
-                        st.toast("¡Guardado en Mis Nubes!")
-                       
+            <br>
+            """, unsafe_allow_html=True)
+           
+            col_space1, col_btn, col_space2 = st.columns([1, 1.5, 1])
+            with col_btn:
+                if st.button("Comenzar Práctica  ➔", type="primary", use_container_width=True):
+                    st.session_state.page = "practica"
+                    if not st.session_state.history:
+                        st.session_state.history.append({
+                            "role": "assistant",
+                            "content": "¡Hola! Soy tu Tutor Virtual de Inecuaciones. Ingresa una expresión para empezar (ej. -3x + 5 ≤ 20).",
+                            "is_image": False
+                        })
                     st.rerun()
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<span style='color: #475569; font-size: 13px;'>Copia rápido: ≤ | ≥ | ≠ | ∞ | ∪ | ∩</span>", unsafe_allow_html=True)
-       
-        # El key dinámico es lo que evita el bucle de subida
-        uploaded_image = st.file_uploader(
-            "📎 Adjuntar Ejercicio (Opcional)",
-            type=['png', 'jpg', 'jpeg'],
-            label_visibility="collapsed",
-            key=f"uploader_{st.session_state.uploader_key}"
-        )
-       
-        # El usuario debe usar el chat input para enviar el mensaje + la imagen adjunta
+    # ==========================================
+    # VISTA 2: PRÁCTICA (CHAT CON SCROLL INTERNO)
+    # ==========================================
+    elif st.session_state.page == "practica":
+        
+        # 1. CONTENEDOR CON SCROLL: ESTO HACE QUE LA CABECERA NUNCA SE MUEVA
+        chat_scroll = st.container(height=380, border=False)
+        with chat_scroll:
+            for msg in st.session_state.history:
+                render_chat_bubble(msg["role"], msg["content"], msg.get("image_b64"))
+
+            # Botón flotante para guardar al final de los mensajes
+            if len(st.session_state.history) > 0 and st.session_state.history[-1]["role"] == "assistant":
+                st.markdown("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+                col_save, _ = st.columns([2, 4])
+                with col_save:
+                    if st.button("☁️ Guardar este aprendizaje", key="btn_save_cloud"):
+                        is_first_cloud = len(st.session_state.clouds) == 0
+                        st.session_state.clouds.append(st.session_state.history[-1]["content"])
+                        if is_first_cloud:
+                            st.toast("¡Primer insight guardado! ☁️ Revisa 'Mis Nubes ☁️' arriba.")
+                        else:
+                            st.toast("¡Guardado en Mis Nubes!")
+                        st.rerun()
+
+        # Separador sutil
+        st.markdown("<hr style='border: 0.5px solid #cbd5e1; margin: 15px 0 10px 0;'>", unsafe_allow_html=True)
+
+        # 2. HERRAMIENTAS AGRUPADAS (Subir archivo e íconos acomodados juntos)
+        col_tools1, col_tools2, col_tools3 = st.columns([2, 1, 2])
+        
+        with col_tools1:
+            st.markdown("""
+            <div style="padding-top: 10px;">
+                <span style='color: #8B0000; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;'>Copia rápido:</span>
+                <span style='color: #0F172A; font-size: 16px; font-family: monospace; letter-spacing: 2px; margin-left: 5px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with col_tools3:
+            uploaded_image = st.file_uploader(
+                "Adjuntar Imagen",
+                type=['png', 'jpg', 'jpeg'],
+                label_visibility="collapsed",
+                key=f"uploader_{st.session_state.uploader_key}"
+            )
+
+        # 3. CHAT INPUT
         user_input = st.chat_input("Escribe tu duda y presiona Enter...")
 
         if user_input:
