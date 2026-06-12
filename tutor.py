@@ -7,26 +7,16 @@ def mostrar_tutor():
     # ── CSS DEFINITIVO Y BLINDADO CONTRA EL MODO OSCURO ──
     st.markdown("""
     <style>
-        /* Ocultar menú principal nativo */
+        /* ── SALVAR LA FLECHA LATERAL PERO OCULTAR LO DEMÁS ── */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
-        
-        /* ── SALVAR BOTÓN DE MENU LATERAL PERO OCULTAR LO DEMÁS DE ARRIBA ── */
+        /* Hacemos la cabecera transparente en vez de borrarla para no perder la flecha */
         [data-testid="stHeader"] {
             background-color: transparent !important;
+            box-shadow: none !important;
         }
-        .stDecoration, [data-testid="stToolbar"] { 
-            display: none !important; 
-        }
-        /* Botón de reabrir menú lateral (flechita) */
-        [data-testid="collapsedControl"] {
-            color: #8B0000 !important;
-            background-color: transparent !important;
-            margin-top: 5px;
-        }
-        [data-testid="collapsedControl"] svg {
-            fill: #8B0000 !important;
-        }
+        /* Ocultamos los botones de Github y Deploy de la derecha */
+        [data-testid="stToolbar"] { display: none !important; }
 
         /* Fondo general crema inquebrantable para toda la app */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
@@ -67,7 +57,7 @@ def mostrar_tutor():
             border-top: none !important;
         }
 
-        /* ── BOTONES DEL HEADER ── */
+        /* ── BOTONES DEL HEADER Y HERRAMIENTAS ── */
         div.stButton > button {
             background-color: #FAF6F0 !important;
             color: #8B0000 !important;
@@ -90,13 +80,6 @@ def mostrar_tutor():
             border-radius: 12px !important;
             height: 50px !important;
             font-size: 16px !important;
-        }
-
-        /* ── TOGGLE DE CÁMARA (Interruptor) COLOR VINO ── */
-        [data-testid="stToggle"] label p {
-            color: #8B0000 !important;
-            font-weight: 800 !important;
-            font-size: 14px !important;
         }
 
         /* ── CHAT INPUT IMPECABLE (Blanco y Vino) ── */
@@ -161,6 +144,7 @@ def mostrar_tutor():
         ("history", []),
         ("clouds", []),
         ("uploader_key", 0),
+        ("cam_active", False) # Estado para la cámara
     ]:
         if key not in st.session_state:
             st.session_state[key] = val
@@ -246,7 +230,7 @@ def mostrar_tutor():
     st.markdown("<hr style='border:none;border-top:1.5px solid #cbd5e1;margin:10px 0 15px 0;'>", unsafe_allow_html=True)
 
     # ══════════════════════════════
-    # SIDEBAR
+    # SIDEBAR (Donde viven tus fórmulas y nubes)
     # ══════════════════════════════
     with st.sidebar:
         if st.session_state.sidebar_view == "formulas":
@@ -343,11 +327,14 @@ def mostrar_tutor():
             )
             
         with col_cam:
-            # Botón interruptor para la cámara (Ahora sí es rojo vino)
-            usar_camara = st.toggle("📷 Abrir Cámara")
+            # ── BOTÓN ESTÁNDAR PARA LA CÁMARA (Totalmente controlado por nuestro CSS crema y vino) ──
+            texto_btn = "❌ Cerrar Cámara" if st.session_state.cam_active else "📷 Abrir Cámara"
+            if st.button(texto_btn, key="btn_toggle_cam"):
+                st.session_state.cam_active = not st.session_state.cam_active
+                st.rerun()
 
         camera_image = None
-        if usar_camara:
+        if st.session_state.cam_active:
             st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
             camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
@@ -370,6 +357,8 @@ def mostrar_tutor():
                 "role": "assistant", "content": reply, "is_image": False
             })
             
+            # Limpiamos uploader y apagamos cámara al enviar
             if img_activa:
                 st.session_state.uploader_key += 1
+                st.session_state.cam_active = False
             st.rerun()
