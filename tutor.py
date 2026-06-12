@@ -4,7 +4,7 @@ import base64
 import html
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO Y LIMPIO ──
+    # ── CSS DEFINITIVO: ANTI BARRAS NEGRAS Y CÁMARA FLOTANTE ──
     st.markdown("""
     <style>
         /* Ocultar elementos nativos de arriba y abajo */
@@ -12,16 +12,42 @@ def mostrar_tutor():
         header {visibility: hidden;}
         footer {visibility: hidden;}
 
-        /* Fondo general crema */
-        .stApp {
+        /* Fondo general crema inquebrantable */
+        html, body, .stApp, [data-testid="stAppViewContainer"] {
             background-color: #FAF6F0 !important;
+            background: #FAF6F0 !important;
         }
 
         /* Contenedor principal centrado y ordenado */
         .main .block-container {
             padding-top: 20px !important;
-            padding-bottom: 90px !important; /* Espacio para el chat input */
+            padding-bottom: 90px !important; 
             max-width: 950px !important;
+        }
+
+        /* ── ELIMINAR LA BARRA NEGRA DE AL LADO (SIDEBAR) ── */
+        section[data-testid="stSidebar"], 
+        [data-testid="stSidebar"] > div {
+            background-color: #FAF6F0 !important;
+            border-right: 1px solid #cbd5e1 !important;
+        }
+
+        /* ── ELIMINAR LA BARRA NEGRA DE ABAJO (BOTTOM CONTAINER) ── */
+        div[data-testid="stBottom"], 
+        div[data-testid="stBottom"] > div,
+        [data-testid="stBottomBlockContainer"] {
+            background-color: #FAF6F0 !important;
+            background: #FAF6F0 !important;
+            border-top: none !important;
+        }
+
+        /* ── ARREGLO DE LA CÁMARA (POPOVER MÁS ANCHO) ── */
+        div[data-testid="stPopoverBody"] {
+            min-width: 340px !important; /* Ancho suficiente para que no se corte */
+            background-color: #FAF6F0 !important;
+            border: 2px solid #8B0000 !important;
+            border-radius: 16px !important;
+            padding: 15px !important;
         }
 
         /* ── BOTONES DEL HEADER ── */
@@ -47,15 +73,6 @@ def mostrar_tutor():
             border-radius: 12px !important;
             height: 50px !important;
             font-size: 16px !important;
-        }
-
-        /* ── ARREGLO DE LA CAJA NEGRA INFERIOR DE STREAMLIT ── */
-        /* Forzamos que el ancla inferior del chat sea crema, no negra */
-        [data-testid="stBottomBlockContainer"],
-        [data-testid="stBottom"] > div,
-        div[data-testid="stBottom"] {
-            background-color: #FAF6F0 !important;
-            border-top: none !important;
         }
 
         /* ── CHAT INPUT IMPECABLE (Blanco y Vino) ── */
@@ -266,7 +283,6 @@ def mostrar_tutor():
     elif st.session_state.page == "practica":
 
         # ── CONTENEDOR DEL CHAT CON SCROLL ESTÁTICO ──
-        # Le damos una altura generosa para que el menú de arriba no se pierda.
         chat_scroll = st.container(height=420, border=False)
         with chat_scroll:
             for msg in st.session_state.history:
@@ -286,8 +302,7 @@ def mostrar_tutor():
         # ── HERRAMIENTAS (Debajo del chat, ordenadas) ──
         st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
-        # Usamos 3 columnas precisas: Signos | Adjuntar Foto | Tomar Foto
-        col_sym, col_up, col_cam = st.columns([2.5, 1, 1])
+        col_sym, col_up, col_cam = st.columns([2.5, 1, 1.2])
         
         with col_sym:
             st.markdown("""
@@ -305,8 +320,9 @@ def mostrar_tutor():
             )
             
         with col_cam:
-            # Popover mágico: Oculta la gran caja negra de la cámara hasta que haces clic
+            # Popover mágico: Abre una ventana ancha para que la cámara no se recorte
             with st.popover("📷 Tomar Foto"):
+                st.markdown("<span style='color:#8B0000; font-weight:bold;'>Activa tu cámara</span>", unsafe_allow_html=True)
                 camera_image = st.camera_input("Cámara", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
         # ── CHAT INPUT ──
