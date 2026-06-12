@@ -380,7 +380,7 @@ def mostrar_tutor():
     # ══════════════════════════════
     elif st.session_state.page == "practica":
 
-        # Chat con scroll interno — altura calculada para no desbordarse
+        # Chat con scroll interno
         chat_scroll = st.container(height=350, border=False)
         with chat_scroll:
             for msg in st.session_state.history:
@@ -394,9 +394,35 @@ def mostrar_tutor():
                         st.toast("¡Guardado! Ve a '☁️ Nubes' en el panel." if first else "¡Guardado en Mis Nubes!")
                         st.rerun()
 
+            # ── ANCLA DE AUTO-SCROLL: siempre al final del contenedor ──
+            st.markdown(
+                '<div id="chat-bottom"></div>'
+                '<script>'
+                '(function(){'
+                '  var el = document.getElementById("chat-bottom");'
+                '  if(el){'
+                '    var scrollable = el.closest("[data-testid=\\"stVerticalBlockBorderWrapper\\"]")'
+                '                  || el.closest(".stVerticalBlock");'
+                '    // Sube por el DOM hasta encontrar el div con overflow:auto (el contenedor con height)'
+                '    var node = el.parentElement;'
+                '    while(node){'
+                '      var st = window.getComputedStyle(node);'
+                '      if(st.overflowY === "auto" || st.overflowY === "scroll"){'
+                '        node.scrollTop = node.scrollHeight;'
+                '        break;'
+                '      }'
+                '      node = node.parentElement;'
+                '    }'
+                '  }'
+                '})();'
+                '</script>',
+                unsafe_allow_html=True
+            )
+
         # Barra de herramientas (fija debajo del chat)
         st.markdown("<hr style='border:none;border-top:1px solid #e2e8f0;margin:6px 0 4px 0;'>",
                     unsafe_allow_html=True)
+
         col_sym, col_up = st.columns([3, 2])
         with col_sym:
             st.markdown("""
@@ -406,9 +432,17 @@ def mostrar_tutor():
                 <span style='color:#0F172A;font-size:16px;font-family:monospace;
                              letter-spacing:2px;margin-left:6px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
             </div>""", unsafe_allow_html=True)
+
         with col_up:
+            # Label visible para que el usuario sepa que puede subir imagen
+            st.markdown(
+                "<span style='color:#8B0000;font-size:10px;font-weight:700;"
+                "text-transform:uppercase;letter-spacing:1px;'>📎 Adjuntar imagen:</span>",
+                unsafe_allow_html=True
+            )
             uploaded_image = st.file_uploader(
-                "img", type=['png', 'jpg', 'jpeg'],
+                "Adjuntar imagen",
+                type=['png', 'jpg', 'jpeg'],
                 label_visibility="collapsed",
                 key=f"up_{st.session_state.uploader_key}"
             )
