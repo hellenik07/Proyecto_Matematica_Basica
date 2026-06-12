@@ -4,19 +4,34 @@ import base64
 import html
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO Y BLINDADO CONTRA EL MODO OSCURO ──
+    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL RESCATADA Y CÁMARA HERMOSA ──
     st.markdown("""
     <style>
-        /* ── SALVAR LA FLECHA LATERAL PERO OCULTAR LO DEMÁS ── */
+        /* Ocultar menú principal nativo */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
-        /* Hacemos la cabecera transparente en vez de borrarla para no perder la flecha */
+        
+        /* ── RESCATAR EL BOTÓN PARA ABRIR/CERRAR LA BARRA LATERAL ── */
         [data-testid="stHeader"] {
             background-color: transparent !important;
             box-shadow: none !important;
         }
-        /* Ocultamos los botones de Github y Deploy de la derecha */
-        [data-testid="stToolbar"] { display: none !important; }
+        [data-testid="stToolbar"] { display: none !important; /* Quita los botones de Github/Deploy */ }
+        
+        /* ¡Esta es la flechita para abrir las nubes! Siempre visible, color crema y vino */
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            background-color: #FAF6F0 !important;
+            border: 2px solid #8B0000 !important;
+            border-radius: 8px !important;
+            margin-top: 10px !important;
+            margin-left: 10px !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+            z-index: 999999 !important;
+        }
+        [data-testid="collapsedControl"] svg {
+            fill: #8B0000 !important;
+        }
 
         /* Fondo general crema inquebrantable para toda la app */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
@@ -24,11 +39,12 @@ def mostrar_tutor():
             background: #FAF6F0 !important;
         }
 
-        /* Contenedor principal centrado y ordenado */
+        /* ── ¡AQUÍ ESTÁ LA MAGIA PARA CENTRAR! ── */
         .main .block-container {
             padding-top: 15px !important;
             padding-bottom: 90px !important; 
             max-width: 950px !important;
+            margin: 0 auto !important; /* ESTO CENTRA LA PANTALLA PERFECTAMENTE */
         }
 
         /* ── ERRADICAR EL MODO OSCURO DE LA BARRA LATERAL ── */
@@ -80,6 +96,24 @@ def mostrar_tutor():
             border-radius: 12px !important;
             height: 50px !important;
             font-size: 16px !important;
+        }
+
+        /* ── ESTUCHE HERMOSO PARA LA CÁMARA ── */
+        [data-testid="stCameraInput"] {
+            background-color: #FFFFFF !important;
+            border: 2px solid #cbd5e1 !important;
+            border-radius: 16px !important;
+            padding: 15px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+            margin-top: 15px !important;
+        }
+        /* El botón nativo de tomar foto dentro de la cámara */
+        [data-testid="stCameraInput"] button {
+            background-color: #8B0000 !important;
+            color: white !important;
+            border-radius: 8px !important;
+            border: none !important;
+            font-weight: bold !important;
         }
 
         /* ── CHAT INPUT IMPECABLE (Blanco y Vino) ── */
@@ -144,7 +178,7 @@ def mostrar_tutor():
         ("history", []),
         ("clouds", []),
         ("uploader_key", 0),
-        ("cam_active", False) # Estado para la cámara
+        ("cam_active", False) # Controla si la cámara está visible
     ]:
         if key not in st.session_state:
             st.session_state[key] = val
@@ -230,7 +264,7 @@ def mostrar_tutor():
     st.markdown("<hr style='border:none;border-top:1.5px solid #cbd5e1;margin:10px 0 15px 0;'>", unsafe_allow_html=True)
 
     # ══════════════════════════════
-    # SIDEBAR (Donde viven tus fórmulas y nubes)
+    # SIDEBAR
     # ══════════════════════════════
     with st.sidebar:
         if st.session_state.sidebar_view == "formulas":
@@ -327,15 +361,14 @@ def mostrar_tutor():
             )
             
         with col_cam:
-            # ── BOTÓN ESTÁNDAR PARA LA CÁMARA (Totalmente controlado por nuestro CSS crema y vino) ──
             texto_btn = "❌ Cerrar Cámara" if st.session_state.cam_active else "📷 Abrir Cámara"
             if st.button(texto_btn, key="btn_toggle_cam"):
                 st.session_state.cam_active = not st.session_state.cam_active
                 st.rerun()
 
+        # AQUÍ ES DONDE LA CÁMARA SE MUESTRA BONITA SI ESTÁ ACTIVA
         camera_image = None
         if st.session_state.cam_active:
-            st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
             camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
         # ── CHAT INPUT ──
@@ -357,7 +390,6 @@ def mostrar_tutor():
                 "role": "assistant", "content": reply, "is_image": False
             })
             
-            # Limpiamos uploader y apagamos cámara al enviar
             if img_activa:
                 st.session_state.uploader_key += 1
                 st.session_state.cam_active = False
