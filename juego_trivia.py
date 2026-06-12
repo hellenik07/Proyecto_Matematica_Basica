@@ -338,114 +338,114 @@ section.main, .main .block-container {
     max-width: 820px !important;
 }
 
-/* Tipografía compacta */
-h1 { font-weight:900!important; font-size:1.7rem!important; color:#8B0000!important;
+/* Tipografía agrandada */
+h1 { font-weight:900!important; font-size:1.9rem!important; color:#8B0000!important;
      letter-spacing:-0.02em!important; margin:0 0 2px 0!important; text-align:center; }
-h2 { font-weight:800!important; font-size:1.25rem!important; color:#0F172A!important; margin:0 0 4px 0!important; }
-h3 { font-weight:700!important; font-size:1rem!important; color:#1E293B!important; margin:0 0 4px 0!important; }
-p, li, label { color:#334155!important; font-size:0.92rem!important; line-height:1.55!important; }
-.eyebrow { font-size:0.62rem!important; font-weight:800!important; letter-spacing:0.16em!important;
+h2 { font-weight:800!important; font-size:1.4rem!important; color:#0F172A!important; margin:0 0 4px 0!important; }
+h3 { font-weight:700!important; font-size:1.15rem!important; color:#1E293B!important; margin:0 0 4px 0!important; }
+p, li, label { color:#334155!important; font-size:1.05rem!important; line-height:1.6!important; }
+.eyebrow { font-size:0.75rem!important; font-weight:800!important; letter-spacing:0.16em!important;
            text-transform:uppercase!important; color:#8B0000!important; margin-bottom:1px!important; display:block; }
 
 /* ── WELCOME BANNER ── */
-.welcome-banner { background:#8B0000; border-radius:14px; padding:16px 20px 14px; margin-bottom:14px; }
-.gauss-title { font-size:1.25rem!important; font-weight:900!important; color:#FFF5F0!important; margin-bottom:5px!important; }
-.gauss-story { font-size:0.87rem!important; color:#FFD5CC!important; line-height:1.5!important; font-weight:600!important; }
+.welcome-banner { background:#8B0000; border-radius:14px; padding:18px 22px 16px; margin-bottom:14px; }
+.gauss-title { font-size:1.4rem!important; font-weight:900!important; color:#FFF5F0!important; margin-bottom:5px!important; }
+.gauss-story { font-size:1rem!important; color:#FFD5CC!important; line-height:1.55!important; font-weight:600!important; }
 .rules-row { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
 .rules-chip { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); border-radius:6px;
-              padding:3px 10px; font-size:0.74rem!important; color:#FFE8E0!important; font-weight:700!important; }
+              padding:4px 12px; font-size:0.85rem!important; color:#FFE8E0!important; font-weight:700!important; }
 
 /* ── NIVEL CARDS ── */
-.nivel-card { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:12px; padding:14px 13px 10px;
+.nivel-card { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:12px; padding:16px 14px 12px;
               position:relative; overflow:hidden; transition:all 0.15s ease; }
 .nivel-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px;
                       background:#8B0000; border-radius:12px 12px 0 0; }
 .nivel-card:hover { border-color:#8B0000; box-shadow:0 4px 14px rgba(139,0,0,0.13); transform:translateY(-1px); }
-.nivel-num { font-family:'Space Mono',monospace!important; font-size:0.6rem!important; font-weight:700!important;
-             letter-spacing:0.14em!important; text-transform:uppercase!important; color:#8B0000!important; margin-bottom:3px!important; }
-.nivel-name { font-size:0.88rem!important; font-weight:800!important; color:#0F172A!important; margin-bottom:3px!important; }
-.nivel-stars { font-size:0.85rem!important; margin-bottom:4px!important; }
-.nivel-desc { font-size:0.78rem!important; color:#64748B!important; line-height:1.35!important; margin-bottom:8px!important; }
-.nivel-tag { display:inline-block; font-family:'Space Mono',monospace!important; font-size:0.62rem!important;
-             color:#64748B!important; background:#F1EDE8; border:1px solid #CBD5E1; border-radius:3px;
-             padding:1px 5px; margin:1px 1px 0 0; }
+.nivel-num { font-family:'Space Mono',monospace!important; font-size:0.75rem!important; font-weight:700!important;
+             letter-spacing:0.14em!important; text-transform:uppercase!important; color:#8B0000!important; margin-bottom:4px!important; }
+.nivel-name { font-size:1.05rem!important; font-weight:800!important; color:#0F172A!important; margin-bottom:4px!important; }
+.nivel-stars { font-size:1rem!important; margin-bottom:6px!important; }
+.nivel-desc { font-size:0.95rem!important; color:#64748B!important; line-height:1.4!important; margin-bottom:10px!important; }
+.nivel-tag { display:inline-block; font-family:'Space Mono',monospace!important; font-size:0.75rem!important;
+             color:#64748B!important; background:#F1EDE8; border:1px solid #CBD5E1; border-radius:4px;
+             padding:2px 6px; margin:2px 2px 0 0; }
 
-/* ── HUD COMPACTO (barra horizontal) ── */
-.hud-bar { display:flex; gap:6px; margin-bottom:8px; align-items:stretch; }
+/* ── HUD COMPACTO ── */
+.hud-bar { display:flex; gap:8px; margin-bottom:10px; align-items:stretch; }
 .hud-chip { flex:1; background:#FAF6F0; border:1px solid #CBD5E1; border-radius:8px;
-            padding:5px 10px; display:flex; flex-direction:column; gap:1px; }
-.hud-label { font-size:0.55rem!important; letter-spacing:0.12em!important; text-transform:uppercase!important;
+            padding:6px 12px; display:flex; flex-direction:column; gap:2px; }
+.hud-label { font-size:0.68rem!important; letter-spacing:0.12em!important; text-transform:uppercase!important;
              color:#94A3B8!important; font-weight:800!important; }
-.hud-value { font-size:0.88rem!important; color:#0F172A!important; font-weight:800!important; white-space:nowrap; }
+.hud-value { font-size:1rem!important; color:#0F172A!important; font-weight:800!important; white-space:nowrap; }
 
 /* ── BARRA DEL RÍO ── */
 .rio-bar { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:8px;
-           padding:5px 12px; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
-.rio-label { font-size:0.58rem!important; font-weight:800!important; letter-spacing:0.12em!important;
+           padding:6px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
+.rio-label { font-size:0.7rem!important; font-weight:800!important; letter-spacing:0.12em!important;
              text-transform:uppercase!important; color:#8B0000!important; white-space:nowrap; }
-.rio-track { font-size:1.05rem; letter-spacing:0.04em; line-height:1; }
+.rio-track { font-size:1.2rem; letter-spacing:0.04em; line-height:1; }
 
 /* ── PROGRESS BAR ── */
-[data-testid="stProgress"] { margin-bottom:8px!important; }
-[data-testid="stProgress"] > div > div { background:#8B0000!important; border-radius:2px!important; }
-[data-testid="stProgress"] > div { background:#DDD8D2!important; border-radius:2px!important; height:4px!important; }
+[data-testid="stProgress"] { margin-bottom:10px!important; }
+[data-testid="stProgress"] > div > div { background:#8B0000!important; border-radius:3px!important; }
+[data-testid="stProgress"] > div { background:#DDD8D2!important; border-radius:3px!important; height:5px!important; }
 
 /* ── TARJETA INECUACIÓN ── */
 .ineq-card { background:#FAF6F0; border:1px solid #CBD5E1; border-left:4px solid #8B0000;
-             border-radius:0 10px 10px 0; padding:8px 16px 6px; margin-bottom:10px; }
+             border-radius:0 12px 12px 0; padding:10px 18px 8px; margin-bottom:12px; }
 .ineq-badge { display:inline-block; background:#8B0000; color:#FFF5F0!important;
-              font-size:0.6rem!important; font-weight:800!important; letter-spacing:0.11em!important;
-              text-transform:uppercase!important; padding:2px 8px; border-radius:3px; margin-bottom:5px; }
+              font-size:0.75rem!important; font-weight:800!important; letter-spacing:0.11em!important;
+              text-transform:uppercase!important; padding:3px 10px; border-radius:4px; margin-bottom:6px; }
 
 /* ── DOTS DE PASO ── */
-.paso-dot-row { display:flex; gap:5px; margin-bottom:8px; align-items:center; }
-.paso-dot { width:7px; height:7px; border-radius:50%; background:#CBD5E1; }
+.paso-dot-row { display:flex; gap:6px; margin-bottom:10px; align-items:center; }
+.paso-dot { width:8px; height:8px; border-radius:50%; background:#CBD5E1; }
 .paso-dot-active { background:#8B0000!important; box-shadow:0 0 5px rgba(139,0,0,0.45)!important; }
 .paso-dot-done { background:#94A3B8!important; }
 
 /* ── BOTONES GLOBALES ── */
 .stButton > button { font-family:'Nunito',sans-serif!important; font-weight:800!important;
-    font-size:0.88rem!important; background:#FAF6F0!important; color:#0F172A!important;
-    border:1.5px solid #CBD5E1!important; border-radius:9px!important; padding:8px 12px!important;
+    font-size:1rem!important; background:#FAF6F0!important; color:#0F172A!important;
+    border:1.5px solid #CBD5E1!important; border-radius:10px!important; padding:10px 14px!important;
     transition:all 0.13s ease!important; }
 .stButton > button:hover { background:#8B0000!important; border-color:#8B0000!important;
     color:#FFFFFF!important; box-shadow:0 2px 10px rgba(139,0,0,0.2)!important; transform:translateY(-1px)!important; }
 
 /* ── OPCIONES ── */
-.opt-btn { background:#FAF6F0; border:1.5px solid #CBD5E1; border-radius:9px; padding:9px 12px;
-           text-align:center; color:#0F172A!important; font-size:0.87rem!important; font-weight:700!important;
-           min-height:46px; display:flex; align-items:center; justify-content:center; line-height:1.35; }
+.opt-btn { background:#FAF6F0; border:1.5px solid #CBD5E1; border-radius:10px; padding:12px 14px;
+           text-align:center; color:#0F172A!important; font-size:1rem!important; font-weight:700!important;
+           min-height:50px; display:flex; align-items:center; justify-content:center; line-height:1.4; }
 .opt-correct { background:#F0FDF4!important; border:2px solid #16A34A!important; color:#15803D!important; font-weight:800!important; }
 .opt-selected-wrong { background:#FFF1F2!important; border:2px solid #DC2626!important; color:#B91C1C!important; font-weight:800!important; }
-.opt-eliminated { border:1.5px dashed #CBD5E1; border-radius:9px; padding:9px 12px; text-align:center;
-                  color:#CBD5E1!important; font-size:0.82rem!important; min-height:46px;
+.opt-eliminated { border:1.5px dashed #CBD5E1; border-radius:10px; padding:12px 14px; text-align:center;
+                  color:#CBD5E1!important; font-size:0.95rem!important; min-height:50px;
                   display:flex; align-items:center; justify-content:center; }
 
 /* ── ALERTS ── */
-[data-testid="stAlert"] { border-radius:8px!important; padding:9px 13px!important; margin-top:6px!important; }
-[data-testid="stAlert"] p, [data-testid="stAlert"] div { font-size:0.88rem!important; font-weight:700!important; }
+[data-testid="stAlert"] { border-radius:10px!important; padding:12px 16px!important; margin-top:8px!important; }
+[data-testid="stAlert"] p, [data-testid="stAlert"] div { font-size:1.05rem!important; font-weight:700!important; }
 
 /* ── PANTALLA FINAL ── */
-.final-win { background:#8B0000; border-radius:14px; padding:20px 24px 16px; text-align:center; margin-bottom:12px; }
-.final-win h2 { color:#FFFFFF!important; font-size:1.3rem!important; }
-.final-win p  { color:#FFD5CC!important; font-weight:600!important; font-size:0.9rem!important; }
-.final-card { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:14px; padding:20px 22px 16px;
-              text-align:center; margin-bottom:12px; }
-.fail-panel { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:10px; padding:14px 18px; margin-top:8px; }
-.fail-intro { font-size:0.9rem!important; color:#0F172A!important; font-weight:800!important; margin-bottom:8px!important; }
-.fail-item { display:flex; align-items:flex-start; gap:8px; padding:6px 0;
-             border-bottom:1px solid #EDE8E2; font-size:0.88rem!important;
-             color:#334155!important; line-height:1.4!important; font-weight:600!important; }
+.final-win { background:#8B0000; border-radius:16px; padding:24px 28px 20px; text-align:center; margin-bottom:14px; }
+.final-win h2 { color:#FFFFFF!important; font-size:1.5rem!important; }
+.final-win p  { color:#FFD5CC!important; font-weight:600!important; font-size:1.05rem!important; }
+.final-card { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:16px; padding:24px 26px 20px;
+              text-align:center; margin-bottom:14px; }
+.fail-panel { background:#FAF6F0; border:1px solid #CBD5E1; border-radius:12px; padding:16px 20px; margin-top:10px; }
+.fail-intro { font-size:1.05rem!important; color:#0F172A!important; font-weight:800!important; margin-bottom:10px!important; }
+.fail-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0;
+             border-bottom:1px solid #EDE8E2; font-size:1rem!important;
+             color:#334155!important; line-height:1.45!important; font-weight:600!important; }
 .fail-item:last-child { border-bottom:none; }
-.fail-num { background:#8B0000; color:#FFFFFF!important; font-weight:800!important; font-size:0.7rem!important;
-            border-radius:50%; min-width:20px; height:20px; display:flex; align-items:center;
-            justify-content:center; flex-shrink:0; margin-top:1px; }
+.fail-num { background:#8B0000; color:#FFFFFF!important; font-weight:800!important; font-size:0.85rem!important;
+            border-radius:50%; min-width:24px; height:24px; display:flex; align-items:center;
+            justify-content:center; flex-shrink:0; margin-top:2px; }
 
-hr { border:none; border-top:1px solid #E2DDD8!important; margin:8px 0!important; }
+hr { border:none; border-top:1px solid #E2DDD8!important; margin:12px 0!important; }
 
 /* Reducir gap entre elementos Streamlit */
 .element-container { margin-bottom:0!important; }
-[data-testid="stHorizontalBlock"] { gap:6px!important; }
+[data-testid="stHorizontalBlock"] { gap:8px!important; }
 /* Reducir espacio encima/debajo de latex */
 .stMarkdown { margin-bottom:0!important; }
 </style>
@@ -527,8 +527,8 @@ def mostrar_juego():
   <div class="nivel-name">{meta['nombre']}</div>
   <div class="nivel-stars">{meta['stars']}</div>
   <div class="nivel-desc">{meta['desc']}</div>
-  <div style="margin-top:6px;">{tags_html}</div>
-</div><div style="height:6px"></div>""", unsafe_allow_html=True)
+  <div style="margin-top:8px;">{tags_html}</div>
+</div><div style="height:8px"></div>""", unsafe_allow_html=True)
                 if st.button(f"Aceptar Reto {lvl}", key=f"sel_{lvl}", use_container_width=True):
                     _iniciar_nivel(lvl)
                     st.rerun()
@@ -638,7 +638,7 @@ def mostrar_juego():
     ya_respondido = st.session_state.resultado is not None
     correcto      = st.session_state.resultado == "correcto"
 
-    col_huir, col_comodin, col_esp = st.columns([1.4, 1.9, 2.7])
+    col_huir, col_comodin, col_esp = st.columns([1.5, 2.2, 2.5])
     with col_huir:
         if st.button("⬅ Cambiar nivel", key="back_nivel"):
             st.session_state.nivel = None; st.rerun()
@@ -650,7 +650,7 @@ def mostrar_juego():
                     _usar_comodin(st.session_state.opciones_shuffle["opciones"], st.session_state.opciones_shuffle["correcta"])
                 st.rerun()
         elif st.session_state.comodines == 0:
-            st.markdown("<span style='color:#94A3B8;font-size:0.82rem;font-weight:700;padding-top:8px;display:inline-block;'>🃏 Sin comodines</span>", unsafe_allow_html=True)
+            st.markdown("<span style='color:#94A3B8;font-size:0.95rem;font-weight:700;padding-top:10px;display:inline-block;'>🃏 Sin comodines</span>", unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -663,7 +663,7 @@ def mostrar_juego():
     )
     st.markdown(
         f"<div class='paso-dot-row'>{dots}"
-        f"<span style='font-size:0.78rem;color:#94A3B8;margin-left:5px;font-weight:800;'>"
+        f"<span style='font-size:0.9rem;color:#94A3B8;margin-left:6px;font-weight:800;'>"
         f"Paso {paso['num']} de {total_p} · {ineq['titulo']}</span></div>",
         unsafe_allow_html=True,
     )
@@ -671,7 +671,7 @@ def mostrar_juego():
     ecuacion_display = paso["expresion"] if (ya_respondido and correcto) else paso["expresion_dinamica"]
 
     # ── ECUACIÓN CENTRADA + PREGUNTA DEBAJO ──
-    col_l, col_center, col_r = st.columns([0.5, 3, 0.5])
+    col_l, col_center, col_r = st.columns([0.2, 3.6, 0.2])
     with col_center:
         st.markdown(f"""
 <div class="ineq-card" style="text-align:center;">
@@ -680,8 +680,8 @@ def mostrar_juego():
         st.latex(ecuacion_display)
         st.markdown("</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<p style='font-weight:700;font-size:1.06rem;color:#1E293B!important;"
-            f"margin-top:6px;line-height:1.55;text-align:center;'>{paso['pregunta']}</p>",
+            f"<p style='font-weight:700;font-size:1.2rem;color:#1E293B!important;"
+            f"margin-top:8px;line-height:1.6;text-align:center;'>{paso['pregunta']}</p>",
             unsafe_allow_html=True,
         )
 
