@@ -320,11 +320,16 @@ TEMAS_ERROR = {
 }
 
 # ══════════════════════════════════════════════════════════════
-# CSS — sin cambios
+# CSS (AHORA INCLUYE EL OCULTAMIENTO DE LA BARRA SUPERIOR DE STREAMLIT)
 # ══════════════════════════════════════════════════════════════
 CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+/* Ocultar barra superior de Streamlit (Botones de deploy/configuración) */
+.stDecoration, [data-testid="stHeader"] {
+    display: none !important;
+}
 
 html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"], section.main, .main .block-container {
     background-color: #F5F0EB !important;
@@ -869,6 +874,8 @@ def _avanzar_paso() -> None:
 
 # ══════════════════════════════════════════════════════════════
 if __name__ == "__main__":
+    # Como st.set_page_config en main.py está controlando esto,
+    # dejaremos que el juego use el layout natural cuando se corra directamente
     st.set_page_config(
         page_title="Misión: Rescatar a Gauss",
         layout="centered",
