@@ -317,9 +317,9 @@ with tab1:
   <p>No siempre necesitamos un valor exacto. A veces solo necesitamos saber
   si algo es mayor, menor o esta dentro de un rango. Por ejemplo:</p>
   <ul>
-    <li>Hay suficiente dinero para comprar algo?</li>
-    <li>Cuantas personas caben en un lugar?</li>
-    <li>Cual es la velocidad maxima permitida?</li>
+    <li>¿Hay suficiente dinero para comprar algo?</li>
+    <li>¿Cuantas personas caben en un lugar?</li>
+    <li>¿Cual es la velocidad maxima permitida?</li>
   </ul>
 </div>
 """, unsafe_allow_html=True)
