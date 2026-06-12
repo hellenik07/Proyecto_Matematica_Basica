@@ -394,26 +394,27 @@ def mostrar_tutor():
                         st.toast("¡Guardado! Ve a '☁️ Nubes' en el panel." if first else "¡Guardado en Mis Nubes!")
                         st.rerun()
 
-            # ── ANCLA DE AUTO-SCROLL: siempre al final del contenedor ──
+            # ── ANCLA DE AUTO-SCROLL: Añadimos espacio extra (height:40px) y setTimeout ──
             st.markdown(
-                '<div id="chat-bottom"></div>'
+                '<div id="chat-bottom" style="height: 40px; width: 100%;"></div>'
                 '<script>'
                 '(function(){'
-                '  var el = document.getElementById("chat-bottom");'
-                '  if(el){'
-                '    var scrollable = el.closest("[data-testid=\\"stVerticalBlockBorderWrapper\\"]")'
-                '                  || el.closest(".stVerticalBlock");'
-                '    // Sube por el DOM hasta encontrar el div con overflow:auto (el contenedor con height)'
-                '    var node = el.parentElement;'
-                '    while(node){'
-                '      var st = window.getComputedStyle(node);'
-                '      if(st.overflowY === "auto" || st.overflowY === "scroll"){'
-                '        node.scrollTop = node.scrollHeight;'
-                '        break;'
+                '  setTimeout(function() {'
+                '    var el = document.getElementById("chat-bottom");'
+                '    if(el){'
+                '      var scrollable = el.closest("[data-testid=\\"stVerticalBlockBorderWrapper\\"]")'
+                '                    || el.closest(".stVerticalBlock");'
+                '      var node = el.parentElement;'
+                '      while(node){'
+                '        var st = window.getComputedStyle(node);'
+                '        if(st.overflowY === "auto" || st.overflowY === "scroll"){'
+                '          node.scrollTop = node.scrollHeight;'
+                '          break;'
+                '        }'
+                '        node = node.parentElement;'
                 '      }'
-                '      node = node.parentElement;'
                 '    }'
-                '  }'
+                '  }, 100);'
                 '})();'
                 '</script>',
                 unsafe_allow_html=True
@@ -423,7 +424,7 @@ def mostrar_tutor():
         st.markdown("<hr style='border:none;border-top:1px solid #e2e8f0;margin:6px 0 4px 0;'>",
                     unsafe_allow_html=True)
 
-        col_sym, col_up = st.columns([3, 2])
+        col_sym, col_up = st.columns([1.5, 2.5]) # Ajustamos el espacio para que quepa la cámara
         with col_sym:
             st.markdown("""
             <div style='padding-top:6px;'>
@@ -434,32 +435,45 @@ def mostrar_tutor():
             </div>""", unsafe_allow_html=True)
 
         with col_up:
-            # Label visible para que el usuario sepa que puede subir imagen
+            # ── NUEVA INTEGRACIÓN DE ADJUNTAR / TOMAR FOTO ──
             st.markdown(
                 "<span style='color:#8B0000;font-size:10px;font-weight:700;"
-                "text-transform:uppercase;letter-spacing:1px;'>📎 Adjuntar imagen:</span>",
+                "text-transform:uppercase;letter-spacing:1px;'>📎 Adjuntar / 📷 Tomar foto:</span>",
                 unsafe_allow_html=True
             )
-            uploaded_image = st.file_uploader(
-                "Adjuntar imagen",
-                type=['png', 'jpg', 'jpeg'],
-                label_visibility="collapsed",
-                key=f"up_{st.session_state.uploader_key}"
-            )
+            c_file, c_cam = st.columns(2)
+            with c_file:
+                uploaded_image = st.file_uploader(
+                    "Adjuntar",
+                    type=['png', 'jpg', 'jpeg'],
+                    label_visibility="collapsed",
+                    key=f"up_{st.session_state.uploader_key}"
+                )
+            with c_cam:
+                camera_image = st.camera_input(
+                    "Cámara",
+                    label_visibility="collapsed",
+                    key=f"cam_{st.session_state.uploader_key}"
+                )
 
         user_input = st.chat_input("Escribe tu duda...")
 
         if user_input:
-            img_b64 = encode_image(uploaded_image) if uploaded_image else None
+            # Determina cuál de las dos imágenes se subió (archivo o cámara)
+            img_activa = uploaded_image if uploaded_image else camera_image
+            img_b64 = encode_image(img_activa) if img_activa else None
+            
             st.session_state.history.append({
                 "role": "user", "content": user_input,
                 "image_b64": img_b64, "is_image": bool(img_b64)
             })
             with st.spinner("Analizando..."):
-                reply = get_ai_response(user_input, uploaded_image)
+                reply = get_ai_response(user_input, img_activa)
             st.session_state.history.append({
                 "role": "assistant", "content": reply, "is_image": False
             })
-            if uploaded_image:
+            
+            # Resetear la llave para limpiar tanto el uploader como la cámara
+            if img_activa:
                 st.session_state.uploader_key += 1
             st.rerun()
