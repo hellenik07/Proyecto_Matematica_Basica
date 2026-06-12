@@ -7,7 +7,7 @@ import tutor
 # ══════════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="MathSolve — Inecuaciones",
-    layout="centered",
+    layout="wide", # ¡Cambio clave para aprovechar la pantalla completa!
 )
 
 # ══════════════════════════════════════════════════════════════
@@ -28,7 +28,7 @@ section.main,
     color: #1A1A1A !important;
 }
 .main .block-container {
-    max-width: 800px !important;
+    max-width: 1100px !important; /* Liberamos el ancho para que ocupe el espacio */
     padding-top: 2.2rem !important;
     padding-bottom: 3rem !important;
 }
