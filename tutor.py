@@ -7,11 +7,26 @@ def mostrar_tutor():
     # ── CSS DEFINITIVO Y BLINDADO CONTRA EL MODO OSCURO ──
     st.markdown("""
     <style>
-        /* Ocultar elementos nativos de arriba y abajo */
+        /* Ocultar menú principal nativo */
         #MainMenu {visibility: hidden;}
-        header {visibility: hidden;}
         footer {visibility: hidden;}
-        .stDecoration, [data-testid="stHeader"] { display: none !important; }
+        
+        /* ── SALVAR BOTÓN DE MENU LATERAL PERO OCULTAR LO DEMÁS DE ARRIBA ── */
+        [data-testid="stHeader"] {
+            background-color: transparent !important;
+        }
+        .stDecoration, [data-testid="stToolbar"] { 
+            display: none !important; 
+        }
+        /* Botón de reabrir menú lateral (flechita) */
+        [data-testid="collapsedControl"] {
+            color: #8B0000 !important;
+            background-color: transparent !important;
+            margin-top: 5px;
+        }
+        [data-testid="collapsedControl"] svg {
+            fill: #8B0000 !important;
+        }
 
         /* Fondo general crema inquebrantable para toda la app */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
@@ -75,6 +90,13 @@ def mostrar_tutor():
             border-radius: 12px !important;
             height: 50px !important;
             font-size: 16px !important;
+        }
+
+        /* ── TOGGLE DE CÁMARA (Interruptor) COLOR VINO ── */
+        [data-testid="stToggle"] label p {
+            color: #8B0000 !important;
+            font-weight: 800 !important;
+            font-size: 14px !important;
         }
 
         /* ── CHAT INPUT IMPECABLE (Blanco y Vino) ── */
@@ -321,7 +343,7 @@ def mostrar_tutor():
             )
             
         with col_cam:
-            # Reemplazamos Popover por Toggle para evitar recortes
+            # Botón interruptor para la cámara (Ahora sí es rojo vino)
             usar_camara = st.toggle("📷 Abrir Cámara")
 
         camera_image = None
