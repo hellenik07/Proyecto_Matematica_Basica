@@ -4,32 +4,43 @@ import base64
 import html
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO: ANTI BARRAS NEGRAS Y CÁMARA FLOTANTE ──
+    # ── CSS DEFINITIVO Y BLINDADO CONTRA EL MODO OSCURO ──
     st.markdown("""
     <style>
         /* Ocultar elementos nativos de arriba y abajo */
         #MainMenu {visibility: hidden;}
         header {visibility: hidden;}
         footer {visibility: hidden;}
+        .stDecoration, [data-testid="stHeader"] { display: none !important; }
 
-        /* Fondo general crema inquebrantable */
-        html, body, .stApp, [data-testid="stAppViewContainer"] {
+        /* Fondo general crema inquebrantable para toda la app */
+        html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
         }
 
         /* Contenedor principal centrado y ordenado */
         .main .block-container {
-            padding-top: 20px !important;
+            padding-top: 15px !important;
             padding-bottom: 90px !important; 
             max-width: 950px !important;
         }
 
-        /* ── ELIMINAR LA BARRA NEGRA DE AL LADO (SIDEBAR) ── */
-        section[data-testid="stSidebar"], 
-        [data-testid="stSidebar"] > div {
+        /* ── ERRADICAR EL MODO OSCURO DE LA BARRA LATERAL ── */
+        [data-testid="stSidebar"], 
+        [data-testid="stSidebar"] > div:first-child,
+        [data-testid="stSidebarNav"] {
             background-color: #FAF6F0 !important;
+            background: #FAF6F0 !important;
             border-right: 1px solid #cbd5e1 !important;
+        }
+        
+        /* Forzar color de texto oscuro en la barra lateral */
+        [data-testid="stSidebar"] p, 
+        [data-testid="stSidebar"] span, 
+        [data-testid="stSidebar"] div, 
+        [data-testid="stSidebar"] h2 {
+            color: #0F172A !important;
         }
 
         /* ── ELIMINAR LA BARRA NEGRA DE ABAJO (BOTTOM CONTAINER) ── */
@@ -39,15 +50,6 @@ def mostrar_tutor():
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
             border-top: none !important;
-        }
-
-        /* ── ARREGLO DE LA CÁMARA (POPOVER MÁS ANCHO) ── */
-        div[data-testid="stPopoverBody"] {
-            min-width: 340px !important; /* Ancho suficiente para que no se corte */
-            background-color: #FAF6F0 !important;
-            border: 2px solid #8B0000 !important;
-            border-radius: 16px !important;
-            padding: 15px !important;
         }
 
         /* ── BOTONES DEL HEADER ── */
@@ -197,7 +199,7 @@ def mostrar_tutor():
         </div>""", unsafe_allow_html=True)
 
     # ══════════════════════════════
-    # HEADER (El menú superior que siempre se verá)
+    # HEADER (Menú estático)
     # ══════════════════════════════
     c_back, c_logo, c_m, c_f, c_n, c_reset = st.columns([1, 2.5, 1.2, 1.2, 1.2, 1.2])
     with c_back:
@@ -226,25 +228,25 @@ def mostrar_tutor():
     # ══════════════════════════════
     with st.sidebar:
         if st.session_state.sidebar_view == "formulas":
-            st.markdown("<h2 style='color:#8B0000;'>Apoyo Rápido</h2>", unsafe_allow_html=True)
+            st.markdown("<h2 style='color:#8B0000; font-weight:800;'>Apoyo Rápido</h2>", unsafe_allow_html=True)
             st.markdown("""
-            <div style="background-color:#FAF6F0; border-radius:12px; border:1px solid #e2e8f0; padding:15px; color:#475569;">
-              <strong style='color:#8B0000;'>Regla del Negativo</strong><br><br>
+            <div style="background-color:#FFFFFF; border-radius:12px; border:1px solid #cbd5e1; padding:15px; color:#0F172A; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+              <strong style='color:#8B0000; font-size:16px;'>Regla del Negativo</strong><br><br>
               Al multiplicar o dividir por (−):<br><br>
               ≤  se convierte en  ≥<br>
               &lt;  se convierte en  &gt;
             </div>""", unsafe_allow_html=True)
         else:
-            st.markdown("<h2 style='color:#8B0000;'>☁️ Mis Nubes</h2>", unsafe_allow_html=True)
+            st.markdown("<h2 style='color:#8B0000; font-weight:800;'>☁️ Mis Nubes</h2>", unsafe_allow_html=True)
             if not st.session_state.clouds:
-                st.markdown("<span style='color:#94a3b8;'>Aún no hay nubes guardadas.</span>", unsafe_allow_html=True)
+                st.markdown("<span style='color:#0F172A;'>Aún no hay nubes guardadas.</span>", unsafe_allow_html=True)
             else:
                 for idx, cloud in enumerate(reversed(st.session_state.clouds)):
                     st.markdown(f"""
-                    <div style="background:#FAF6F0;border:1.5px solid #8B0000;border-radius:12px;
-                                padding:10px;margin-bottom:10px;">
-                      <div style="color:#8B0000;font-weight:bold;font-size:13px;">☁️ Aprendizaje</div>
-                      <div style="color:#475569;font-size:13px;margin-top:6px;">{html.escape(cloud)}</div>
+                    <div style="background:#FFFFFF;border:1px solid #cbd5e1;border-radius:12px;
+                                padding:12px;margin-bottom:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                      <div style="color:#8B0000;font-weight:bold;font-size:14px;">☁️ Aprendizaje</div>
+                      <div style="color:#0F172A;font-size:14px;margin-top:6px;line-height:1.5;">{html.escape(cloud)}</div>
                     </div>""", unsafe_allow_html=True)
 
     # ══════════════════════════════
@@ -282,7 +284,7 @@ def mostrar_tutor():
     # ══════════════════════════════
     elif st.session_state.page == "practica":
 
-        # ── CONTENEDOR DEL CHAT CON SCROLL ESTÁTICO ──
+        # ── CONTENEDOR DEL CHAT ──
         chat_scroll = st.container(height=420, border=False)
         with chat_scroll:
             for msg in st.session_state.history:
@@ -296,13 +298,12 @@ def mostrar_tutor():
                         st.toast("¡Guardado en Mis Nubes!")
                         st.rerun()
             
-            # Espacio invisible protector para que el último mensaje jamás se corte
             st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-        # ── HERRAMIENTAS (Debajo del chat, ordenadas) ──
         st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
-        col_sym, col_up, col_cam = st.columns([2.5, 1, 1.2])
+        # ── HERRAMIENTAS (Debajo del chat) ──
+        col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
         
         with col_sym:
             st.markdown("""
@@ -320,10 +321,13 @@ def mostrar_tutor():
             )
             
         with col_cam:
-            # Popover mágico: Abre una ventana ancha para que la cámara no se recorte
-            with st.popover("📷 Tomar Foto"):
-                st.markdown("<span style='color:#8B0000; font-weight:bold;'>Activa tu cámara</span>", unsafe_allow_html=True)
-                camera_image = st.camera_input("Cámara", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
+            # Reemplazamos Popover por Toggle para evitar recortes
+            usar_camara = st.toggle("📷 Abrir Cámara")
+
+        camera_image = None
+        if usar_camara:
+            st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
+            camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
         # ── CHAT INPUT ──
         user_input = st.chat_input("Escribe tu duda y presiona Enter...")
