@@ -23,10 +23,10 @@ def mostrar_tutor():
             background-color: transparent !important;
             box-shadow: none !important;
         }
-        [data-testid="stToolbar"] { display: none !important; /* Quita los botones de Github/Deploy */ }
+        [data-testid="stToolbar"] { display: none !important; }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) ── */
-        [data-testid="collapsedControl"] {
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO PARA ABRIR Y CERRAR ── */
+        [data-testid="collapsedControl"], button[data-testid="stBaseButton-headerNoPadding"] {
             display: flex !important;
             background-color: #FAF6F0 !important;
             border: 2px solid #8B0000 !important;
@@ -39,38 +39,45 @@ def mostrar_tutor():
             height: 45px !important;
             align-items: center !important;
             justify-content: center !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
         }
-        [data-testid="collapsedControl"] svg {
-            display: none !important; /* Ocultar el ícono de flecha nativo */
+        
+        /* Ocultar las flechas nativas de Streamlit (tanto de abrir como de cerrar) */
+        [data-testid="collapsedControl"] svg, button[data-testid="stBaseButton-headerNoPadding"] svg {
+            display: none !important; 
         }
-        [data-testid="collapsedControl"]::after {
+        
+        /* Inyectar las 3 rayitas siempre visibles */
+        [data-testid="collapsedControl"]::after, button[data-testid="stBaseButton-headerNoPadding"]::after {
             content: "☰" !important;
             color: #8B0000 !important;
             font-size: 26px !important;
             font-weight: 900 !important;
+            font-family: sans-serif !important;
         }
 
-        /* Fondo general crema inquebrantable para toda la app y texto forzado para modo incógnito */
+        /* Fondo general crema inquebrantable para toda la app y texto forzado */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
             color: #0F172A !important; 
         }
         
-        /* Forzar color de texto en contenedores por defecto para modo incógnito */
         .stMarkdown, .stMarkdown p {
             color: #0F172A !important;
         }
 
-        /* ── ¡AQUÍ ESTÁ LA MAGIA PARA CENTRAR! ── */
+        /* Centrado de pantalla */
         .main .block-container {
-            padding-top: 15px !important;
+            padding-top: 60px !important; /* Espacio para que no choque con las 3 rayitas fijo */
             padding-bottom: 90px !important; 
             max-width: 950px !important;
-            margin: 0 auto !important; /* ESTO CENTRA LA PANTALLA PERFECTAMENTE */
+            margin: 0 auto !important; 
         }
 
-        /* ── ERRADICAR EL MODO OSCURO DE LA BARRA LATERAL ── */
+        /* Barra lateral */
         [data-testid="stSidebar"], 
         [data-testid="stSidebar"] > div:first-child,
         [data-testid="stSidebarNav"] {
@@ -79,7 +86,6 @@ def mostrar_tutor():
             border-right: 1px solid #cbd5e1 !important;
         }
         
-        /* Forzar color de texto oscuro en la barra lateral */
         [data-testid="stSidebar"] p, 
         [data-testid="stSidebar"] span, 
         [data-testid="stSidebar"] div, 
@@ -87,7 +93,7 @@ def mostrar_tutor():
             color: #0F172A !important;
         }
 
-        /* ── ELIMINAR LA BARRA NEGRA DE ABAJO (BOTTOM CONTAINER) ── */
+        /* Eliminar contenedor negro inferior */
         div[data-testid="stBottom"], 
         div[data-testid="stBottom"] > div,
         [data-testid="stBottomBlockContainer"] {
@@ -96,14 +102,13 @@ def mostrar_tutor():
             border-top: none !important;
         }
 
-        /* ── BOTONES DEL HEADER Y HERRAMIENTAS ── */
+        /* Botones generales */
         div.stButton > button {
             background-color: #FAF6F0 !important;
             color: #8B0000 !important;
             border: 1.5px solid #8B0000 !important;
             border-radius: 10px !important;
             font-weight: 700 !important;
-            font-family: 'Nunito', sans-serif !important;
             transition: 0.2s all ease-in-out !important;
             width: 100% !important;
         }
@@ -112,7 +117,7 @@ def mostrar_tutor():
             color: white !important;
         }
 
-        /* ── BOTÓN CTA PRIMARIO ── */
+        /* Botón primario */
         div.stButton > button[kind="primary"] {
             background-color: #8B0000 !important;
             color: white !important;
@@ -121,7 +126,7 @@ def mostrar_tutor():
             font-size: 16px !important;
         }
 
-        /* ── ESTUCHE HERMOSO PARA LA CÁMARA ── */
+        /* Entrada de cámara */
         [data-testid="stCameraInput"] {
             background-color: #FFFFFF !important;
             border: 2px solid #cbd5e1 !important;
@@ -130,7 +135,6 @@ def mostrar_tutor():
             box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
             margin-top: 15px !important;
         }
-        /* El botón nativo de tomar foto dentro de la cámara */
         [data-testid="stCameraInput"] button {
             background-color: #8B0000 !important;
             color: white !important;
@@ -139,7 +143,7 @@ def mostrar_tutor():
             font-weight: bold !important;
         }
 
-        /* ── CHAT INPUT IMPECABLE (Blanco y Vino) ── */
+        /* Chat input */
         [data-testid="stChatInput"] {
             background-color: transparent !important;
             border: none !important;
@@ -173,7 +177,7 @@ def mostrar_tutor():
             fill: #8B0000 !important;
         }
 
-        /* ── UPLOADER LIMPIO Y SIN BORDES ── */
+        /* File Uploader */
         [data-testid="stFileUploader"] { padding: 0 !important; margin: 0 !important; }
         [data-testid="stFileUploaderDropzoneInstructions"],
         [data-testid="stFileUploader"] small,
@@ -200,7 +204,7 @@ def mostrar_tutor():
         ("sidebar_view", "menu"), 
         ("history", [{ 
             "role": "assistant",
-            "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
+            "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expression para empezar (ej. -3x + 5 ≤ 20).",
             "is_image": False
         }]),
         ("clouds", []),
@@ -265,14 +269,10 @@ def mostrar_tutor():
           </div>
         </div>""", unsafe_allow_html=True)
 
-
-    # ══════════════════════════════
-    # SIDEBAR MÁGICO (Menú Dinámico Reemplazable)
-    # ══════════════════════════════
+    # ── SIDEBAR MÁGICO ──
     with st.sidebar:
         st.markdown("<h1 style='color:#8B0000;margin:0 0 20px 0;font-size:28px;font-weight:900;'>MathSolve.</h1>", unsafe_allow_html=True)
         
-        # --- VISTA: MENÚ PRINCIPAL ---
         if st.session_state.sidebar_view == "menu":
             if st.button("📖 Teoría"):
                 st.session_state.sidebar_view = "teoria"; st.rerun()
@@ -292,11 +292,9 @@ def mostrar_tutor():
                 st.session_state.clouds = []
                 st.rerun()
 
-        # --- VISTA: FÓRMULAS ---
         elif st.session_state.sidebar_view == "formulas":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
-            
             st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>Apoyo Rápido</h2>", unsafe_allow_html=True)
             st.markdown("""
             <div style="background-color:#FFFFFF; border-radius:12px; border:1px solid #cbd5e1; padding:15px; color:#0F172A; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -306,11 +304,9 @@ def mostrar_tutor():
               &lt;  se convierte en  &gt;
             </div>""", unsafe_allow_html=True)
 
-        # --- VISTA: TEORÍA ---
         elif st.session_state.sidebar_view == "teoria":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
-            
             st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>Teoría</h2>", unsafe_allow_html=True)
             st.markdown("""
             <div style='background-color:#FFFFFF; border-radius:12px; border:1px solid #cbd5e1; padding:15px; color:#0F172A; box-shadow: 0 4px 10px rgba(0,0,0,0.05);'>
@@ -322,11 +318,9 @@ def mostrar_tutor():
             </div>
             """, unsafe_allow_html=True)
 
-        # --- VISTA: NUBES ---
         elif st.session_state.sidebar_view == "nubes":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
-            
             st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>☁️ Mis Nubes</h2>", unsafe_allow_html=True)
             if not st.session_state.clouds:
                 st.markdown("<span style='color:#0F172A;'>Aún no hay nubes guardadas.</span>", unsafe_allow_html=True)
@@ -339,12 +333,7 @@ def mostrar_tutor():
                       <div style="color:#0F172A;font-size:14px;margin-top:6px;line-height:1.5;">{html.escape(cloud)}</div>
                     </div>""", unsafe_allow_html=True)
 
-
-    # ══════════════════════════════
-    # VISTA PRINCIPAL (SOLO CHAT)
-    # ══════════════════════════════
-    
-    # ── CONTENEDOR DEL CHAT ──
+    # ── VISTA PRINCIPAL (SOLO CHAT) ──
     chat_scroll = st.container(height=420, border=False)
     with chat_scroll:
         for msg in st.session_state.history:
@@ -360,8 +349,7 @@ def mostrar_tutor():
         
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-        # ── INYECCIÓN MÁGICA PARA AUTO-SCROLL (Se asegura de que el chat siempre baje) ──
-        # ── INYECCIÓN MÁGICA PARA AUTO-SCROLL (Se asegura de que el chat siempre baje) ──
+        # Auto-scroll corregido y seguro
         components.html(
             f"""
             <script>
@@ -383,9 +371,10 @@ def mostrar_tutor():
             height=0, 
             width=0
         )
+
     st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
-    # ── HERRAMIENTAS (Debajo del chat) ──
+    # Herramientas debajo del chat
     col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
     
     with col_sym:
@@ -409,12 +398,10 @@ def mostrar_tutor():
             st.session_state.cam_active = not st.session_state.cam_active
             st.rerun()
 
-    # AQUÍ ES DONDE LA CÁMARA SE MUESTRA BONITA SI ESTÁ ACTIVA
     camera_image = None
     if st.session_state.cam_active:
         camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
-    # ── CHAT INPUT ──
     user_input = st.chat_input("Escribe tu duda y presiona Enter...")
 
     if user_input:
