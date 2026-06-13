@@ -10,7 +10,7 @@ st.set_page_config(initial_sidebar_state="collapsed")
 
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL FUNCIONAL Y CÁMARA HERMOSA ──
+    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL CLARA Y CHAT CON BORDE ──
     st.markdown("""
     <style>
         /* Ocultar menú principal nativo */
@@ -23,27 +23,34 @@ def mostrar_tutor():
             box-shadow: none !important;
         }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) CON COLOR QUE SE VEA ── */
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) CON COLOR QUE SE VEA BIEN ── */
         [data-testid="collapsedControl"] {
             display: flex !important;
-            background-color: #FF6B6B !important;
-            border: 2px solid #FF6B6B !important;
+            background-color: #FF5252 !important;
+            border: 3px solid #FF1744 !important;
             border-radius: 8px !important;
             margin-top: 15px !important;
             margin-left: 15px !important;
-            box-shadow: 0 4px 12px rgba(255,107,107,0.4) !important;
+            box-shadow: 0 4px 12px rgba(255,23,68,0.5) !important;
             z-index: 999999 !important;
-            width: 45px !important;
-            height: 45px !important;
+            width: 48px !important;
+            height: 48px !important;
             align-items: center !important;
             justify-content: center !important;
             transition: all 0.2s ease !important;
         }
         
         [data-testid="collapsedControl"]:hover {
-            background-color: #FF5252 !important;
+            background-color: #FF1744 !important;
+            border-color: #FF0066 !important;
+            box-shadow: 0 6px 18px rgba(255,0,102,0.6) !important;
+            transform: scale(1.05) !important;
+        }
+        
+        [data-testid="collapsedControl"][aria-expanded="true"] {
+            background-color: #FF0066 !important;
             border-color: #FF5252 !important;
-            box-shadow: 0 6px 16px rgba(255,82,82,0.5) !important;
+            box-shadow: 0 6px 16px rgba(255,82,82,0.6) !important;
         }
         
         /* Ocultar la flecha nativa de Streamlit */
@@ -51,13 +58,19 @@ def mostrar_tutor():
             display: none !important; 
         }
         
-        /* Inyectar las 3 rayitas */
+        /* Inyectar las 3 rayitas - CAMBIA CUANDO ESTÉ ABIERTO */
         [data-testid="collapsedControl"]::after {
             content: "☰" !important;
             color: white !important;
-            font-size: 26px !important;
+            font-size: 28px !important;
             font-weight: 900 !important;
             font-family: sans-serif !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        [data-testid="collapsedControl"][aria-expanded="true"]::after {
+            content: "✕" !important;
+            font-size: 32px !important;
         }
 
         /* Fondo general crema inquebrantable para toda la app y texto forzado */
@@ -79,13 +92,26 @@ def mostrar_tutor():
             margin: 0 auto !important; 
         }
 
+        /* ── CHAT CON BORDE SUTIL ── */
+        [data-testid="stContainer"] {
+            background-color: #FAF6F0 !important;
+        }
+        
+        /* Contenedor del chat con borde */
+        .chat-container {
+            background-color: #FFFFFF !important;
+            border: 1px solid #E0E6ED !important;
+            border-radius: 16px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
+        }
+
         /* Barra lateral - SOLO ESTILO, NO OCULTAR */
         [data-testid="stSidebar"], 
         [data-testid="stSidebar"] > div:first-child,
         [data-testid="stSidebarNav"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
-            border-right: 1px solid #cbd5e1 !important;
+            border-right: 2px solid #FF5252 !important;
         }
         
         [data-testid="stSidebar"] p, 
@@ -365,6 +391,8 @@ def mostrar_tutor():
 
 
     # ── VISTA PRINCIPAL (SOLO CHAT) ──
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    
     chat_scroll = st.container(height=420, border=False)
     with chat_scroll:
         for msg in st.session_state.history:
@@ -416,6 +444,8 @@ def mostrar_tutor():
             height=0, 
             width=0
         )
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
     st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
