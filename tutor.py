@@ -23,20 +23,27 @@ def mostrar_tutor():
             box-shadow: none !important;
         }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO ── */
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) CON COLOR QUE SE VEA ── */
         [data-testid="collapsedControl"] {
             display: flex !important;
-            background-color: #FAF6F0 !important;
-            border: 2px solid #8B0000 !important;
+            background-color: #FF6B6B !important;
+            border: 2px solid #FF6B6B !important;
             border-radius: 8px !important;
             margin-top: 15px !important;
             margin-left: 15px !important;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.4) !important;
             z-index: 999999 !important;
             width: 45px !important;
             height: 45px !important;
             align-items: center !important;
             justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        [data-testid="collapsedControl"]:hover {
+            background-color: #FF5252 !important;
+            border-color: #FF5252 !important;
+            box-shadow: 0 6px 16px rgba(255,82,82,0.5) !important;
         }
         
         /* Ocultar la flecha nativa de Streamlit */
@@ -47,7 +54,7 @@ def mostrar_tutor():
         /* Inyectar las 3 rayitas */
         [data-testid="collapsedControl"]::after {
             content: "☰" !important;
-            color: #8B0000 !important;
+            color: white !important;
             font-size: 26px !important;
             font-weight: 900 !important;
             font-family: sans-serif !important;
@@ -205,7 +212,8 @@ def mostrar_tutor():
         }]),
         ("clouds", []),
         ("uploader_key", 0),
-        ("cam_active", False)
+        ("cam_active", False),
+        ("first_cloud_shown", False)
     ]:
         if key not in st.session_state:
             st.session_state[key] = val
@@ -285,14 +293,31 @@ def mostrar_tutor():
             
             st.markdown("<br>", unsafe_allow_html=True)
             
+            # Botón de reiniciar CON CONFIRMACIÓN
             if st.button("🔄 Reiniciar Chat"):
-                st.session_state.history = [{
-                    "role": "assistant",
-                    "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
-                    "is_image": False
-                }]
-                st.session_state.clouds = []
-                st.rerun()
+                st.session_state.sidebar_view = "confirm_reiniciar"; st.rerun()
+
+
+        elif st.session_state.sidebar_view == "confirm_reiniciar":
+            st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>⚠️ Reiniciar Chat</h2>", unsafe_allow_html=True)
+            st.markdown("<p style='color:#0F172A;'>¿Estás seguro de que quieres reiniciar todo? Se perderá el chat y las nubes guardadas.</p>", unsafe_allow_html=True)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Sí, reiniciar", kind="primary"):
+                    st.session_state.history = [{
+                        "role": "assistant",
+                        "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
+                        "is_image": False
+                    }]
+                    st.session_state.clouds = []
+                    st.session_state.first_cloud_shown = False
+                    st.session_state.sidebar_view = "menu"
+                    st.toast("Chat reiniciado!")
+                    st.rerun()
+            with col2:
+                if st.button("❌ No, volver"):
+                    st.session_state.sidebar_view = "menu"; st.rerun()
 
 
         elif st.session_state.sidebar_view == "formulas":
@@ -349,9 +374,22 @@ def mostrar_tutor():
             col_sv, _ = st.columns([1.5, 4])
             with col_sv:
                 if st.button("☁️ Guardar Nube", key="btn_save"):
-                    st.session_state.clouds.append(st.session_state.history[-1]["content"])
-                    st.toast("¡Guardado en Mis Nubes!")
-                    st.rerun()
+                    nueva_nube = st.session_state.history[-1]["content"]
+                    
+                    # Verificar si ya existe una nube con el mismo mensaje
+                    if nueva_nube in st.session_state.clouds:
+                        st.toast("⚠️ Esta nube ya está guardada!", icon="⚠️")
+                    else:
+                        st.session_state.clouds.append(nueva_nube)
+                        
+                        # Si es la primera nube, mostrar mensaje de ayuda
+                        if not st.session_state.first_cloud_shown:
+                            st.toast("🎉 ¡Primera nube guardada!", icon="🎉")
+                            st.modal("☁️ **Qué son las Nubes**\n\nLas nubes guardan los aprendizajes importantes de tu chat. Puedes verlas siempre en **☁️ Mis Nubes** en el menú de la izquierda.\n\n**Para verlas:** Abre el menú (☰) → Haz clic en **☁️ Mis Nubes**")
+                            st.session_state.first_cloud_shown = True
+                        else:
+                            st.toast("¡Guardado en Mis Nubes!")
+                        st.rerun()
         
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
