@@ -33,10 +33,16 @@ def mostrar_tutor():
             fill: #8B0000 !important;
         }
 
-        /* Fondo general crema inquebrantable para toda la app */
+        /* Fondo general crema inquebrantable para toda la app y texto forzado para modo incógnito */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
+            color: #0F172A !important; /* <--- FIX INCÓGNITO: Evita que el texto se vuelva blanco en dark mode OS */
+        }
+        
+        /* Forzar color de texto en contenedores por defecto para modo incógnito */
+        .stMarkdown, .stMarkdown p {
+            color: #0F172A !important;
         }
 
         /* ── ¡AQUÍ ESTÁ LA MAGIA PARA CENTRAR! ── */
@@ -173,12 +179,16 @@ def mostrar_tutor():
 
     # ── ESTADO DE SESIÓN ──
     for key, val in [
-        ("page", "teoria"),
-        ("sidebar_view", "formulas"),
-        ("history", []),
+        ("page", "practica"), # AHORA INICIA DIRECTAMENTE EN EL CHAT
+        ("sidebar_view", "menu"), # ESTADO INICIAL DEL SIDEBAR
+        ("history", [{ # MENSAJE INICIAL PARA QUE EL CHAT NO ESTÉ VACÍO
+            "role": "assistant",
+            "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
+            "is_image": False
+        }]),
         ("clouds", []),
         ("uploader_key", 0),
-        ("cam_active", False) # Controla si la cámara está visible
+        ("cam_active", False)
     ]:
         if key not in st.session_state:
             st.session_state[key] = val
@@ -238,37 +248,39 @@ def mostrar_tutor():
           </div>
         </div>""", unsafe_allow_html=True)
 
-    # ══════════════════════════════
-    # HEADER (Menú estático)
-    # ══════════════════════════════
-    c_back, c_logo, c_m, c_f, c_n, c_reset = st.columns([1, 2.5, 1.2, 1.2, 1.2, 1.2])
-    with c_back:
-        if st.button("⬅ Inicio"):
-            st.session_state.pagina = "home"; st.rerun()
-    with c_logo:
-        st.markdown("<h1 style='color:#8B0000;margin:0;font-size:28px;font-weight:900;"
-                    "white-space:nowrap;padding-top:1px;'>MathSolve.</h1>", unsafe_allow_html=True)
-    with c_m:
-        if st.button("📖 Teórico"):
-            st.session_state.page = "teoria"; st.rerun()
-    with c_f:
-        if st.button("📐 Fórmulas"):
-            st.session_state.sidebar_view = "formulas"; st.rerun()
-    with c_n:
-        if st.button("☁️ Nubes"):
-            st.session_state.sidebar_view = "nubes"; st.rerun()
-    with c_reset:
-        if st.button("🔄 Reiniciar"):
-            st.session_state.history = []; st.rerun()
-
-    st.markdown("<hr style='border:none;border-top:1.5px solid #cbd5e1;margin:10px 0 15px 0;'>", unsafe_allow_html=True)
 
     # ══════════════════════════════
-    # SIDEBAR
+    # SIDEBAR MÁGICO (Menú Dinámico Reemplazable)
     # ══════════════════════════════
     with st.sidebar:
-        if st.session_state.sidebar_view == "formulas":
-            st.markdown("<h2 style='color:#8B0000; font-weight:800;'>Apoyo Rápido</h2>", unsafe_allow_html=True)
+        st.markdown("<h1 style='color:#8B0000;margin:0 0 20px 0;font-size:28px;font-weight:900;'>MathSolve.</h1>", unsafe_allow_html=True)
+        
+        # --- VISTA: MENÚ PRINCIPAL ---
+        if st.session_state.sidebar_view == "menu":
+            if st.button("📖 Teoría"):
+                st.session_state.sidebar_view = "teoria"; st.rerun()
+            if st.button("📐 Fórmulas"):
+                st.session_state.sidebar_view = "formulas"; st.rerun()
+            if st.button("☁️ Mis Nubes"):
+                st.session_state.sidebar_view = "nubes"; st.rerun()
+            
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            if st.button("🔄 Reiniciar Chat"):
+                st.session_state.history = [{
+                    "role": "assistant",
+                    "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
+                    "is_image": False
+                }]
+                st.session_state.clouds = []
+                st.rerun()
+
+        # --- VISTA: FÓRMULAS ---
+        elif st.session_state.sidebar_view == "formulas":
+            if st.button("⬅ Volver al Menú"):
+                st.session_state.sidebar_view = "menu"; st.rerun()
+            
+            st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>Apoyo Rápido</h2>", unsafe_allow_html=True)
             st.markdown("""
             <div style="background-color:#FFFFFF; border-radius:12px; border:1px solid #cbd5e1; padding:15px; color:#0F172A; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
               <strong style='color:#8B0000; font-size:16px;'>Regla del Negativo</strong><br><br>
@@ -276,8 +288,29 @@ def mostrar_tutor():
               ≤  se convierte en  ≥<br>
               &lt;  se convierte en  &gt;
             </div>""", unsafe_allow_html=True)
-        else:
-            st.markdown("<h2 style='color:#8B0000; font-weight:800;'>☁️ Mis Nubes</h2>", unsafe_allow_html=True)
+
+        # --- VISTA: TEORÍA ---
+        elif st.session_state.sidebar_view == "teoria":
+            if st.button("⬅ Volver al Menú"):
+                st.session_state.sidebar_view = "menu"; st.rerun()
+            
+            st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>Teoría</h2>", unsafe_allow_html=True)
+            st.markdown("""
+            <div style='background-color:#FFFFFF; border-radius:12px; border:1px solid #cbd5e1; padding:15px; color:#0F172A; box-shadow: 0 4px 10px rgba(0,0,0,0.05);'>
+                <h3 style='color:#0f172a;font-size:18px;margin:0 0 10px 0;'>Desigualdades y Conjuntos</h3>
+                <p style='color:#475569;font-size:14px;line-height:1.5;margin:0;'>
+                    <b>Concepto Básico:</b> Una inecuación es una desigualdad algebraica. Buscamos el conjunto de valores que cumple con la condición de ser mayor o menor.<br><br>
+                    <b>Regla de Oro:</b> Se resuelven casi igual que las ecuaciones lineales, pero si multiplicas o divides por un número <b>negativo</b>, el símbolo de desigualdad se <b>invierte</b>.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # --- VISTA: NUBES ---
+        elif st.session_state.sidebar_view == "nubes":
+            if st.button("⬅ Volver al Menú"):
+                st.session_state.sidebar_view = "menu"; st.rerun()
+            
+            st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>☁️ Mis Nubes</h2>", unsafe_allow_html=True)
             if not st.session_state.clouds:
                 st.markdown("<span style='color:#0F172A;'>Aún no hay nubes guardadas.</span>", unsafe_allow_html=True)
             else:
@@ -289,108 +322,78 @@ def mostrar_tutor():
                       <div style="color:#0F172A;font-size:14px;margin-top:6px;line-height:1.5;">{html.escape(cloud)}</div>
                     </div>""", unsafe_allow_html=True)
 
-    # ══════════════════════════════
-    # VISTA TEORÍA
-    # ══════════════════════════════
-    if st.session_state.page == "teoria":
-        st.markdown("""
-        <div style='text-align:center;padding:10px 20px 20px 20px;'>
-            <div style='display:inline-block;border:2px solid #8B0000;border-radius:12px;
-                        padding:4px 16px;margin-bottom:15px;'>
-                <span style='color:#8B0000;font-weight:bold;font-size:12px;letter-spacing:1px;'>MÓDULO: INECUACIONES</span>
-            </div>
-            <h1 style='color:#0f172a;font-size:36px;margin:0 0 15px 0;line-height:1.2;'>Desigualdades y Conjuntos</h1>
-            <p style='color:#475569;font-size:16px;line-height:1.6;max-width:680px;margin:0 auto 20px auto;text-align:left;'>
-                <b>Concepto Básico:</b> Una inecuación es una desigualdad algebraica. Buscamos el conjunto de valores que cumple con la condición de ser mayor o menor.<br><br>
-                <b>Regla de Oro:</b> Se resuelven casi igual que las ecuaciones lineales, pero si multiplicas o divides por un número <b>negativo</b>, el símbolo de desigualdad se <b>invierte</b>.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-        col_s1, col_cta, col_s2 = st.columns([1.2, 1.6, 1.2])
-        with col_cta:
-            if st.button("Comenzar Práctica  ➔", type="primary"):
-                st.session_state.page = "practica"
-                if not st.session_state.history:
-                    st.session_state.history.append({
-                        "role": "assistant",
-                        "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
-                        "is_image": False
-                    })
-                st.rerun()
 
     # ══════════════════════════════
-    # VISTA PRÁCTICA (CHAT)
+    # VISTA PRINCIPAL (SOLO CHAT)
     # ══════════════════════════════
-    elif st.session_state.page == "practica":
-
-        # ── CONTENEDOR DEL CHAT ──
-        chat_scroll = st.container(height=420, border=False)
-        with chat_scroll:
-            for msg in st.session_state.history:
-                render_chat_bubble(msg["role"], msg["content"], msg.get("image_b64"))
-            
-            if st.session_state.history and st.session_state.history[-1]["role"] == "assistant":
-                col_sv, _ = st.columns([1.5, 4])
-                with col_sv:
-                    if st.button("☁️ Guardar Nube", key="btn_save"):
-                        st.session_state.clouds.append(st.session_state.history[-1]["content"])
-                        st.toast("¡Guardado en Mis Nubes!")
-                        st.rerun()
-            
-            st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
-
-        st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
-
-        # ── HERRAMIENTAS (Debajo del chat) ──
-        col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
+    
+    # ── CONTENEDOR DEL CHAT ──
+    chat_scroll = st.container(height=420, border=False)
+    with chat_scroll:
+        for msg in st.session_state.history:
+            render_chat_bubble(msg["role"], msg["content"], msg.get("image_b64"))
         
-        with col_sym:
-            st.markdown("""
-            <div style='padding-top:10px;'>
-                <span style='color:#8B0000;font-size:12px;font-weight:700;'>Copia rápido:</span>
-                <span style='color:#0F172A;font-size:16px;font-family:monospace;letter-spacing:4px;margin-left:8px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
-            </div>""", unsafe_allow_html=True)
+        if st.session_state.history and st.session_state.history[-1]["role"] == "assistant":
+            col_sv, _ = st.columns([1.5, 4])
+            with col_sv:
+                if st.button("☁️ Guardar Nube", key="btn_save"):
+                    st.session_state.clouds.append(st.session_state.history[-1]["content"])
+                    st.toast("¡Guardado en Mis Nubes!")
+                    st.rerun()
+        
+        st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-        with col_up:
-            uploaded_image = st.file_uploader(
-                "Adjuntar",
-                type=['png', 'jpg', 'jpeg'],
-                label_visibility="collapsed",
-                key=f"up_{st.session_state.uploader_key}"
-            )
-            
-        with col_cam:
-            texto_btn = "❌ Cerrar Cámara" if st.session_state.cam_active else "📷 Abrir Cámara"
-            if st.button(texto_btn, key="btn_toggle_cam"):
-                st.session_state.cam_active = not st.session_state.cam_active
-                st.rerun()
+    st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
-        # AQUÍ ES DONDE LA CÁMARA SE MUESTRA BONITA SI ESTÁ ACTIVA
-        camera_image = None
-        if st.session_state.cam_active:
-            camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
+    # ── HERRAMIENTAS (Debajo del chat) ──
+    col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
+    
+    with col_sym:
+        st.markdown("""
+        <div style='padding-top:10px;'>
+            <span style='color:#8B0000;font-size:12px;font-weight:700;'>Copia rápido:</span>
+            <span style='color:#0F172A;font-size:16px;font-family:monospace;letter-spacing:4px;margin-left:8px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
+        </div>""", unsafe_allow_html=True)
 
-        # ── CHAT INPUT ──
-        user_input = st.chat_input("Escribe tu duda y presiona Enter...")
-
-        if user_input:
-            img_activa = uploaded_image if uploaded_image else camera_image
-            img_b64 = encode_image(img_activa) if img_activa else None
-            
-            st.session_state.history.append({
-                "role": "user", "content": user_input,
-                "image_b64": img_b64, "is_image": bool(img_b64)
-            })
-            
-            with st.spinner("Analizando..."):
-                reply = get_ai_response(user_input, img_activa)
-                
-            st.session_state.history.append({
-                "role": "assistant", "content": reply, "is_image": False
-            })
-            
-            if img_activa:
-                st.session_state.uploader_key += 1
-                st.session_state.cam_active = False
+    with col_up:
+        uploaded_image = st.file_uploader(
+            "Adjuntar",
+            type=['png', 'jpg', 'jpeg'],
+            label_visibility="collapsed",
+            key=f"up_{st.session_state.uploader_key}"
+        )
+        
+    with col_cam:
+        texto_btn = "❌ Cerrar Cámara" if st.session_state.cam_active else "📷 Abrir Cámara"
+        if st.button(texto_btn, key="btn_toggle_cam"):
+            st.session_state.cam_active = not st.session_state.cam_active
             st.rerun()
+
+    # AQUÍ ES DONDE LA CÁMARA SE MUESTRA BONITA SI ESTÁ ACTIVA
+    camera_image = None
+    if st.session_state.cam_active:
+        camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
+
+    # ── CHAT INPUT ──
+    user_input = st.chat_input("Escribe tu duda y presiona Enter...")
+
+    if user_input:
+        img_activa = uploaded_image if uploaded_image else camera_image
+        img_b64 = encode_image(img_activa) if img_activa else None
+        
+        st.session_state.history.append({
+            "role": "user", "content": user_input,
+            "image_b64": img_b64, "is_image": bool(img_b64)
+        })
+        
+        with st.spinner("Analizando..."):
+            reply = get_ai_response(user_input, img_activa)
+            
+        st.session_state.history.append({
+            "role": "assistant", "content": reply, "is_image": False
+        })
+        
+        if img_activa:
+            st.session_state.uploader_key += 1
+            st.session_state.cam_active = False
+        st.rerun()
