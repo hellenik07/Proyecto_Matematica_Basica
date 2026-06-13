@@ -4,29 +4,26 @@ from groq import Groq
 import base64
 import html
 
+
 # ── INICIAR EL MENÚ CERRADO POR DEFECTO ──
-try:
-    st.set_page_config(initial_sidebar_state="collapsed")
-except Exception:
-    pass
+st.set_page_config(initial_sidebar_state="collapsed")
+
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL RESCATADA Y CÁMARA HERMOSA ──
+    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL FUNCIONAL Y CÁMARA HERMOSA ──
     st.markdown("""
     <style>
         /* Ocultar menú principal nativo */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         
-        /* ── RESCATAR EL BOTÓN PARA ABRIR/CERRAR LA BARRA LATERAL ── */
+        /* ── ESTILO DE LA BARRA LATERAL (NO OCULTARLA) ── */
         [data-testid="stHeader"] {
             background-color: transparent !important;
             box-shadow: none !important;
         }
-        [data-testid="stToolbar"] { display: none !important; }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO PARA ABRIR ── */
-        /* Solo afectamos al botón de afuera (collapsedControl), dejando la 'X' de adentro intacta */
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO ── */
         [data-testid="collapsedControl"] {
             display: flex !important;
             background-color: #FAF6F0 !important;
@@ -75,7 +72,7 @@ def mostrar_tutor():
             margin: 0 auto !important; 
         }
 
-        /* Barra lateral */
+        /* Barra lateral - SOLO ESTILO, NO OCULTAR */
         [data-testid="stSidebar"], 
         [data-testid="stSidebar"] > div:first-child,
         [data-testid="stSidebarNav"] {
@@ -196,6 +193,7 @@ def mostrar_tutor():
     </style>
     """, unsafe_allow_html=True)
 
+
     # ── ESTADO DE SESIÓN ──
     for key, val in [
         ("page", "practica"), 
@@ -212,8 +210,10 @@ def mostrar_tutor():
         if key not in st.session_state:
             st.session_state[key] = val
 
+
     if "groq_client" not in st.session_state:
         st.session_state.groq_client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
 
     SYSTEM_PROMPT = (
         "Eres un tutor amigable y experto en matemáticas, especializado en inecuaciones. "
@@ -224,8 +224,10 @@ def mostrar_tutor():
         "NUNCA uses LaTeX ni símbolos de dólar. Usa texto plano (ej: 5x ≤ 25)."
     )
 
+
     def encode_image(f):
         return base64.b64encode(f.getvalue()).decode('utf-8')
+
 
     def get_ai_response(user_text, image_file=None):
         client = st.session_state.groq_client
@@ -251,6 +253,7 @@ def mostrar_tutor():
         except Exception as e:
             return f"⚠️ Error: {e}"
 
+
     def render_chat_bubble(role, text, image_b64=None):
         is_user = role == "user"
         bg = "#262626" if is_user else "#8B0000"
@@ -267,7 +270,8 @@ def mostrar_tutor():
           </div>
         </div>""", unsafe_allow_html=True)
 
-    # ── SIDEBAR MÁGICO ──
+
+    # ── SIDEBAR MÁGICO (FUNCIONAL) ──
     with st.sidebar:
         st.markdown("<h1 style='color:#8B0000;margin:0 0 20px 0;font-size:28px;font-weight:900;'>MathSolve.</h1>", unsafe_allow_html=True)
         
@@ -290,6 +294,7 @@ def mostrar_tutor():
                 st.session_state.clouds = []
                 st.rerun()
 
+
         elif st.session_state.sidebar_view == "formulas":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
@@ -301,6 +306,7 @@ def mostrar_tutor():
               ≤  se convierte en  ≥<br>
               &lt;  se convierte en  &gt;
             </div>""", unsafe_allow_html=True)
+
 
         elif st.session_state.sidebar_view == "teoria":
             if st.button("⬅ Volver al Menú"):
@@ -315,6 +321,7 @@ def mostrar_tutor():
                 </p>
             </div>
             """, unsafe_allow_html=True)
+
 
         elif st.session_state.sidebar_view == "nubes":
             if st.button("⬅ Volver al Menú"):
@@ -331,6 +338,7 @@ def mostrar_tutor():
                       <div style="color:#0F172A;font-size:14px;margin-top:6px;line-height:1.5;">{html.escape(cloud)}</div>
                     </div>""", unsafe_allow_html=True)
 
+
     # ── VISTA PRINCIPAL (SOLO CHAT) ──
     chat_scroll = st.container(height=420, border=False)
     with chat_scroll:
@@ -346,6 +354,7 @@ def mostrar_tutor():
                     st.rerun()
         
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+
 
         # Auto-scroll corregido y seguro
         components.html(
@@ -370,7 +379,9 @@ def mostrar_tutor():
             width=0
         )
 
+
     st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
+
 
     # Herramientas debajo del chat
     col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
@@ -381,6 +392,7 @@ def mostrar_tutor():
             <span style='color:#8B0000;font-size:12px;font-weight:700;'>Copia rápido:</span>
             <span style='color:#0F172A;font-size:16px;font-family:monospace;letter-spacing:4px;margin-left:8px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
         </div>""", unsafe_allow_html=True)
+
 
     with col_up:
         uploaded_image = st.file_uploader(
@@ -396,11 +408,14 @@ def mostrar_tutor():
             st.session_state.cam_active = not st.session_state.cam_active
             st.rerun()
 
+
     camera_image = None
     if st.session_state.cam_active:
         camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
+
     user_input = st.chat_input("Escribe tu duda y presiona Enter...")
+
 
     if user_input:
         img_activa = uploaded_image if uploaded_image else camera_image
@@ -422,3 +437,7 @@ def mostrar_tutor():
             st.session_state.uploader_key += 1
             st.session_state.cam_active = False
         st.rerun()
+
+
+# ── EJECUTAR EL TUTOR ──
+mostrar_tutor()
