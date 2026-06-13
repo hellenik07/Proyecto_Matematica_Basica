@@ -10,7 +10,7 @@ st.set_page_config(initial_sidebar_state="collapsed")
 
 
 def mostrar_tutor():
-    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL CLARA Y CHAT CON BORDE ──
+    # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL FUNCIONAL Y CÁMARA HERMOSA ──
     st.markdown("""
     <style>
         /* Ocultar menú principal nativo */
@@ -23,15 +23,15 @@ def mostrar_tutor():
             box-shadow: none !important;
         }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) CON COLOR QUE SE VEA BIEN ── */
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) QUE SÍ SE VE BIEN ── */
         [data-testid="collapsedControl"] {
             display: flex !important;
-            background-color: #FF5252 !important;
-            border: 3px solid #FF1744 !important;
-            border-radius: 8px !important;
+            background-color: #f1f1f1 !important;
+            border: 2px solid #b8b8b8 !important;
+            border-radius: 10px !important;
             margin-top: 15px !important;
             margin-left: 15px !important;
-            box-shadow: 0 4px 12px rgba(255,23,68,0.5) !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12) !important;
             z-index: 999999 !important;
             width: 48px !important;
             height: 48px !important;
@@ -41,16 +41,16 @@ def mostrar_tutor():
         }
         
         [data-testid="collapsedControl"]:hover {
-            background-color: #FF1744 !important;
-            border-color: #FF0066 !important;
-            box-shadow: 0 6px 18px rgba(255,0,102,0.6) !important;
-            transform: scale(1.05) !important;
+            background-color: #e5e5e5 !important;
+            border-color: #9f9f9f !important;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.16) !important;
+            transform: scale(1.03) !important;
         }
         
         [data-testid="collapsedControl"][aria-expanded="true"] {
-            background-color: #FF0066 !important;
-            border-color: #FF5252 !important;
-            box-shadow: 0 6px 16px rgba(255,82,82,0.6) !important;
+            background-color: #dcdcdc !important;
+            border-color: #8f8f8f !important;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.16) !important;
         }
         
         /* Ocultar la flecha nativa de Streamlit */
@@ -61,7 +61,7 @@ def mostrar_tutor():
         /* Inyectar las 3 rayitas - CAMBIA CUANDO ESTÉ ABIERTO */
         [data-testid="collapsedControl"]::after {
             content: "☰" !important;
-            color: white !important;
+            color: #5f5f5f !important;
             font-size: 28px !important;
             font-weight: 900 !important;
             font-family: sans-serif !important;
@@ -70,7 +70,8 @@ def mostrar_tutor():
         
         [data-testid="collapsedControl"][aria-expanded="true"]::after {
             content: "✕" !important;
-            font-size: 32px !important;
+            font-size: 30px !important;
+            color: #4d4d4d !important;
         }
 
         /* Fondo general crema inquebrantable para toda la app y texto forzado */
@@ -86,23 +87,19 @@ def mostrar_tutor():
 
         /* Centrado de pantalla */
         .main .block-container {
-            padding-top: 60px !important; /* Espacio para que no choque con las 3 rayitas fijo */
+            padding-top: 60px !important;
             padding-bottom: 90px !important; 
             max-width: 950px !important;
             margin: 0 auto !important; 
         }
 
-        /* ── CHAT CON BORDE SUTIL ── */
-        [data-testid="stContainer"] {
-            background-color: #FAF6F0 !important;
-        }
-        
-        /* Contenedor del chat con borde */
+        /* Chat con borde sutil */
         .chat-container {
             background-color: #FFFFFF !important;
-            border: 1px solid #E0E6ED !important;
+            border: 1px solid #E0E0E0 !important;
             border-radius: 16px !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
+            padding: 8px 0 !important;
         }
 
         /* Barra lateral - SOLO ESTILO, NO OCULTAR */
@@ -111,7 +108,7 @@ def mostrar_tutor():
         [data-testid="stSidebarNav"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
-            border-right: 2px solid #FF5252 !important;
+            border-right: 2px solid #d0d0d0 !important;
         }
         
         [data-testid="stSidebar"] p, 
@@ -319,7 +316,6 @@ def mostrar_tutor():
             
             st.markdown("<br>", unsafe_allow_html=True)
             
-            # Botón de reiniciar CON CONFIRMACIÓN
             if st.button("🔄 Reiniciar Chat"):
                 st.session_state.sidebar_view = "confirm_reiniciar"; st.rerun()
 
@@ -403,17 +399,13 @@ def mostrar_tutor():
             with col_sv:
                 if st.button("☁️ Guardar Nube", key="btn_save"):
                     nueva_nube = st.session_state.history[-1]["content"]
-                    
-                    # Verificar si ya existe una nube con el mismo mensaje
                     if nueva_nube in st.session_state.clouds:
                         st.toast("⚠️ Esta nube ya está guardada!", icon="⚠️")
                     else:
                         st.session_state.clouds.append(nueva_nube)
-                        
-                        # Si es la primera nube, mostrar mensaje de ayuda
                         if not st.session_state.first_cloud_shown:
                             st.toast("🎉 ¡Primera nube guardada!", icon="🎉")
-                            st.modal("☁️ **Qué son las Nubes**\n\nLas nubes guardan los aprendizajes importantes de tu chat. Puedes verlas siempre en **☁️ Mis Nubes** en el menú de la izquierda.\n\n**Para verlas:** Abre el menú (☰) → Haz clic en **☁️ Mis Nubes**")
+                            st.info("Las nubes guardan los aprendizajes importantes de tu chat. Para verlas, abre el menú (☰) y entra a ☁️ Mis Nubes.")
                             st.session_state.first_cloud_shown = True
                         else:
                             st.toast("¡Guardado en Mis Nubes!")
@@ -421,12 +413,10 @@ def mostrar_tutor():
         
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-
         # Auto-scroll corregido y seguro
         components.html(
             f"""
             <script>
-                // Actualización de scroll: {len(st.session_state.history)}
                 var iframe = window.frameElement;
                 if(iframe) {{
                     var el = iframe;
@@ -447,8 +437,7 @@ def mostrar_tutor():
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-
-    st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:none;border-top:1px solid #b8b8b8;margin:10px 0;'>", unsafe_allow_html=True)
 
 
     # Herramientas debajo del chat
