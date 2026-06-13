@@ -361,28 +361,28 @@ def mostrar_tutor():
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
         # ── INYECCIÓN MÁGICA PARA AUTO-SCROLL (Se asegura de que el chat siempre baje) ──
+        # ── INYECCIÓN MÁGICA PARA AUTO-SCROLL (Se asegura de que el chat siempre baje) ──
         components.html(
-            """
+            f"""
             <script>
+                // Actualización de scroll: {len(st.session_state.history)}
                 var iframe = window.frameElement;
-                if(iframe) {
+                if(iframe) {{
                     var el = iframe;
-                    while(el && el.parentElement) {
+                    while(el && el.parentElement) {{
                         el = el.parentElement;
                         var style = window.getComputedStyle(el);
-                        if(style.overflowY === 'auto' || style.overflowY === 'scroll') {
+                        if(style.overflowY === 'auto' || style.overflowY === 'scroll') {{
                             el.scrollTop = el.scrollHeight;
                             break;
-                        }
-                    }
-                }
+                        }}
+                    }}
+                }}
             </script>
             """, 
             height=0, 
-            width=0, 
-            key=f"scroll_{len(st.session_state.history)}"
+            width=0
         )
-
     st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
     # ── HERRAMIENTAS (Debajo del chat) ──
