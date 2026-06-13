@@ -23,8 +23,42 @@ def mostrar_tutor():
             box-shadow: none !important;
         }
         
-        /* ── BOTONES DE ABRIR Y CERRAR MENÚ (CON FLECHAS GRISÁCEAS) ── */
-        [data-testid="collapsedControl"], 
+        /* =========================================================
+           1. BOTÓN DE ABRIR MENÚ (FUERA DEL MENÚ)
+           ========================================================= */
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            background-color: #f1f1f1 !important;
+            border: 2px solid #b8b8b8 !important;
+            border-radius: 10px !important;
+            margin-top: 15px !important;
+            margin-left: 15px !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12) !important;
+            width: 48px !important;
+            height: 48px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+            z-index: 999999 !important;
+        }
+
+        [data-testid="collapsedControl"]:hover {
+            background-color: #e5e5e5 !important;
+            border-color: #9f9f9f !important;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.16) !important;
+            transform: scale(1.03) !important;
+        }
+
+        [data-testid="collapsedControl"] svg {
+            display: block !important;
+            fill: #4d4d4d !important;
+            color: #4d4d4d !important;
+            stroke: #4d4d4d !important; /* Necesario para la flecha nativa de abrir */
+        }
+
+        /* =========================================================
+           2. BOTÓN DE CERRAR MENÚ (DENTRO DEL MENÚ)
+           ========================================================= */
         [data-testid="stSidebarCollapseButton"] {
             display: flex !important;
             background-color: #f1f1f1 !important;
@@ -36,24 +70,12 @@ def mostrar_tutor():
             align-items: center !important;
             justify-content: center !important;
             transition: all 0.2s ease !important;
-            z-index: 999999 !important;
-        }
-
-        /* Margen solo para el de abrir (fuera del menú) */
-        [data-testid="collapsedControl"] {
-            margin-top: 15px !important;
-            margin-left: 15px !important;
-        }
-
-        /* Posición para el de cerrar (dentro del menú) */
-        [data-testid="stSidebarCollapseButton"] {
             position: absolute !important;
             top: 15px !important;
             right: 15px !important;
+            z-index: 999999 !important;
         }
-        
-        /* Efecto hover para ambos */
-        [data-testid="collapsedControl"]:hover,
+
         [data-testid="stSidebarCollapseButton"]:hover {
             background-color: #e5e5e5 !important;
             border-color: #9f9f9f !important;
@@ -61,13 +83,14 @@ def mostrar_tutor():
             transform: scale(1.03) !important;
         }
 
-        /* Color de las flechas nativas para que no se mezclen con el fondo */
-        [data-testid="collapsedControl"] svg,
         [data-testid="stSidebarCollapseButton"] svg {
             display: block !important;
             fill: #4d4d4d !important;
             color: #4d4d4d !important;
+            stroke: #4d4d4d !important;
         }
+
+        /* ========================================================= */
 
         /* Fondo general crema inquebrantable para toda la app y texto forzado */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
