@@ -25,8 +25,9 @@ def mostrar_tutor():
         }
         [data-testid="stToolbar"] { display: none !important; }
         
-        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO PARA ABRIR Y CERRAR ── */
-        [data-testid="collapsedControl"], button[data-testid="stBaseButton-headerNoPadding"] {
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) PERFECTO PARA ABRIR ── */
+        /* Solo afectamos al botón de afuera (collapsedControl), dejando la 'X' de adentro intacta */
+        [data-testid="collapsedControl"] {
             display: flex !important;
             background-color: #FAF6F0 !important;
             border: 2px solid #8B0000 !important;
@@ -39,18 +40,15 @@ def mostrar_tutor():
             height: 45px !important;
             align-items: center !important;
             justify-content: center !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
         }
         
-        /* Ocultar las flechas nativas de Streamlit (tanto de abrir como de cerrar) */
-        [data-testid="collapsedControl"] svg, button[data-testid="stBaseButton-headerNoPadding"] svg {
+        /* Ocultar la flecha nativa de Streamlit */
+        [data-testid="collapsedControl"] svg {
             display: none !important; 
         }
         
-        /* Inyectar las 3 rayitas siempre visibles */
-        [data-testid="collapsedControl"]::after, button[data-testid="stBaseButton-headerNoPadding"]::after {
+        /* Inyectar las 3 rayitas */
+        [data-testid="collapsedControl"]::after {
             content: "☰" !important;
             color: #8B0000 !important;
             font-size: 26px !important;
@@ -204,7 +202,7 @@ def mostrar_tutor():
         ("sidebar_view", "menu"), 
         ("history", [{ 
             "role": "assistant",
-            "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expression para empezar (ej. -3x + 5 ≤ 20).",
+            "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
             "is_image": False
         }]),
         ("clouds", []),
