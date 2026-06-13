@@ -1,7 +1,14 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from groq import Groq
 import base64
 import html
+
+# ── INICIAR EL MENÚ CERRADO POR DEFECTO ──
+try:
+    st.set_page_config(initial_sidebar_state="collapsed")
+except Exception:
+    pass
 
 def mostrar_tutor():
     # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL RESCATADA Y CÁMARA HERMOSA ──
@@ -18,26 +25,36 @@ def mostrar_tutor():
         }
         [data-testid="stToolbar"] { display: none !important; /* Quita los botones de Github/Deploy */ }
         
-        /* ¡Esta es la flechita para abrir las nubes! Siempre visible, color crema y vino */
+        /* ── EL BOTÓN DE LAS 3 RAYITAS (HAMBURGUESA) ── */
         [data-testid="collapsedControl"] {
             display: flex !important;
             background-color: #FAF6F0 !important;
             border: 2px solid #8B0000 !important;
             border-radius: 8px !important;
-            margin-top: 10px !important;
-            margin-left: 10px !important;
+            margin-top: 15px !important;
+            margin-left: 15px !important;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
             z-index: 999999 !important;
+            width: 45px !important;
+            height: 45px !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
         [data-testid="collapsedControl"] svg {
-            fill: #8B0000 !important;
+            display: none !important; /* Ocultar el ícono de flecha nativo */
+        }
+        [data-testid="collapsedControl"]::after {
+            content: "☰" !important;
+            color: #8B0000 !important;
+            font-size: 26px !important;
+            font-weight: 900 !important;
         }
 
         /* Fondo general crema inquebrantable para toda la app y texto forzado para modo incógnito */
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"] {
             background-color: #FAF6F0 !important;
             background: #FAF6F0 !important;
-            color: #0F172A !important; /* <--- FIX INCÓGNITO: Evita que el texto se vuelva blanco en dark mode OS */
+            color: #0F172A !important; 
         }
         
         /* Forzar color de texto en contenedores por defecto para modo incógnito */
@@ -179,9 +196,9 @@ def mostrar_tutor():
 
     # ── ESTADO DE SESIÓN ──
     for key, val in [
-        ("page", "practica"), # AHORA INICIA DIRECTAMENTE EN EL CHAT
-        ("sidebar_view", "menu"), # ESTADO INICIAL DEL SIDEBAR
-        ("history", [{ # MENSAJE INICIAL PARA QUE EL CHAT NO ESTÉ VACÍO
+        ("page", "practica"), 
+        ("sidebar_view", "menu"), 
+        ("history", [{ 
             "role": "assistant",
             "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
             "is_image": False
@@ -342,6 +359,29 @@ def mostrar_tutor():
                     st.rerun()
         
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+
+        # ── INYECCIÓN MÁGICA PARA AUTO-SCROLL (Se asegura de que el chat siempre baje) ──
+        components.html(
+            """
+            <script>
+                var iframe = window.frameElement;
+                if(iframe) {
+                    var el = iframe;
+                    while(el && el.parentElement) {
+                        el = el.parentElement;
+                        var style = window.getComputedStyle(el);
+                        if(style.overflowY === 'auto' || style.overflowY === 'scroll') {
+                            el.scrollTop = el.scrollHeight;
+                            break;
+                        }
+                    }
+                }
+            </script>
+            """, 
+            height=0, 
+            width=0, 
+            key=f"scroll_{len(st.session_state.history)}"
+        )
 
     st.markdown("<hr style='border:none;border-top:1px solid #cbd5e1;margin:10px 0;'>", unsafe_allow_html=True)
 
