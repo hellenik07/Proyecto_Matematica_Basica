@@ -225,7 +225,7 @@ div.stButton > button {
     transition: all 0.2s ease !important;
     cursor: pointer !important;
     background-color: #FAF6F0 !important; /* Color Crema constante */
-    color: #8B0000 !important;             /* Texto Vino */
+    color: #8B0000 !important;            /* Texto Vino */
     border: 2px solid #8B0000 !important;  /* Borde Vino */
     box-shadow: 0 3px 10px rgba(0,0,0,0.05) !important;
 }
@@ -254,6 +254,13 @@ div.stButton > button:active, div.stButton > button:focus {
 if "pagina" not in st.session_state:
     st.session_state.pagina = "home"
 
+# --- PUENTE AGREGADO PARA QUE EL BOTÓN DE TUTOR.PY FUNCIONE ---
+# Atrapa el cambio de estado si el tutor usó la variable 'page' o el valor 'main'
+if st.session_state.get("page") == "main" or st.session_state.pagina == "main":
+    st.session_state.pagina = "home"
+    if "page" in st.session_state:
+        st.session_state.page = "home" # Lo emparejamos para evitar conflictos
+# --------------------------------------------------------------
 
 # ══════════════════════════════════════════════════════════════
 # ENRUTAMIENTO

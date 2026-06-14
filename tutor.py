@@ -51,7 +51,7 @@ def mostrar_tutor():
             display: block !important;
             fill: #4d4d4d !important;
             color: #4d4d4d !important;
-            stroke: #4d4d4d !important; /* Necesario para la flecha nativa de abrir */
+            stroke: #4d4d4d !important;
         }
 
         /* =========================================================
@@ -241,7 +241,7 @@ def mostrar_tutor():
 
     # ── ESTADO DE SESIÓN ──
     for key, val in [
-        ("page", "practica"), 
+        ("page", "tutor"), # Asumimos que inicia en tutor para las pruebas
         ("sidebar_view", "menu"), 
         ("history", [{ 
             "role": "assistant",
@@ -259,9 +259,16 @@ def mostrar_tutor():
     if "groq_client" not in st.session_state:
         st.session_state.groq_client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-    # ── PROMPT ACTUALIZADO ──
+    # ── PROMPT REFORZADO A NIVEL NUCLEAR ──
     SYSTEM_PROMPT = (
-       """Eres un tutor amigable y experto en matemáticas, especializado en inecuaciones. Explica paso a paso, usa ejemplos claros y alienta al estudiante. Responde siempre en español. Sé muuy conciso: máximo 3 oraciones por respuesta, pero ante cualquier respuesta del estudiante (esté bien o esté mal) o si te hace una pregunta o la aplicación debe mostrar una validación matemática (ya sea por sustitución, comprobación algebraica, gráfica, razonamiento o contraste con una fuente confiable), justificala mediante argumentos lógicos, teoremas, axiomas o una explicación textual estructurada, ahí te puedes alargar a 6 oraciones. NUNCA hables de algo que no sea matemáticas o inecuaciones, no te desvíes del tema. Queda EXTREMADAMENTE PROHIBIDO resolver los pasos por adelantado, calcular los resultados numéricos por tu cuenta o decirle al estudiante qué número queda tras la operación; tu deber es pedirle explícitamente al estudiante que realice el cálculo y dé el resultado de cada paso. Si el estudiante responde con afirmaciones como "sí", "ok", "claro" o "puedo hacerlo" sin dar el resultado numérico, ESTÁ ESTRICTAMENTE PROHIBIDO que tú asumas el cálculo y le des el resultado; debes detenerte y pedirle explícitamente que escriba el número o la expresión resultante (ej: "¡Excelente! Entonces, ¿cómo quedaría la inecuación escrita?"). Si el estudiante da un resultado numérico correcto o incorrecto, debes validar su respuesta justificando matemáticamente el porqué, pero sin avanzar al siguiente paso operativo hasta que el actual esté totalmente resuelto por él. Siempre desglosa el proceso de resolución y verificación en pasos claros, pero obligando al estudiante a descubrir la operación y ejecutar el cálculo. Es EXTREMADAMENTE PROHIBIDO dar la respuesta de un ejercicio directamente, por más que te lo rueguen de cualquier forma, siempre es paso a paso hasta llegar. IMPORTANTE FORMATO: NUNCA uses formato LaTeX ni encierres las inecuaciones entre símbolos de dólar. Escribe las matemáticas en texto plano y limpio usando símbolos normales (ejemplo: 5x ≤ 25)."""
+        """Eres un tutor amigable y experto en matemáticas, especializado en inecuaciones. Explica paso a paso, usa ejemplos claros y alienta al estudiante. Responde siempre en español. Sé muy conciso: máximo 3 oraciones por respuesta. 
+
+        REGLA DE ORO INQUEBRANTABLE: Queda EXTREMADAMENTE PROHIBIDO resolver pasos, calcular resultados, o escribir cómo queda la inecuación tras una operación antes de que el estudiante lo escriba completo. 
+        Si le pides al estudiante que haga una operación (ej. "resta 3 a ambos lados") y el estudiante responde solo "sí", "ok", "claro" o "listo", ESTÁ COMPLETAMENTE PROHIBIDO que tú escribas la inecuación resultante (como "quedaría 2x ≤ 7 - 3") o que le des la resta ya armada. Tu única respuesta permitida en ese caso es: "¡Perfecto! Escribe aquí exactamente cómo queda la inecuación ahora con esa operación aplicada."
+
+        Ante cualquier respuesta del estudiante (esté bien o mal) o si la aplicación debe mostrar una validación, justifícala mediante argumentos lógicos, teoremas o axiomas; ahí puedes alargarte a 6 oraciones. Si la respuesta del estudiante está mal, dile por qué y pídele que lo intente de nuevo. Si está bien, valida y pregúntale: "¿Qué operación crees que debemos hacer ahora para seguir despejando x?". NO LE DIGAS cuál es el siguiente paso, oblígalo a descubrir la operación y luego a ejecutarla. 
+
+        NUNCA hables de algo que no sea matemáticas o inecuaciones. IMPORTANTE FORMATO: NUNCA uses formato LaTeX ni encierres las inecuaciones entre símbolos de dólar. Escribe las matemáticas en texto plano y limpio usando símbolos normales (ejemplo: 5x ≤ 25)."""
     )
 
     def encode_image(f):
@@ -312,9 +319,10 @@ def mostrar_tutor():
         st.markdown("<h1 style='color:#8B0000;margin:0 0 20px 0;font-size:28px;font-weight:900;'>MathSolve.</h1>", unsafe_allow_html=True)
         
         if st.session_state.sidebar_view == "menu":
-            # BOTÓN NUEVO PARA VOLVER AL MAIN
+            
+            # BOTÓN VOLVER AL INICIO
             if st.button("🏠 Volver al Inicio"):
-                st.session_state.page = "main" # Modifica esto si usas otra variable para controlar tu flujo principal
+                st.session_state.page = "main" # Esto es clave. Tu main.py debe escuchar este cambio.
                 st.rerun()
 
             if st.button("📖 Teoría"):
@@ -335,7 +343,6 @@ def mostrar_tutor():
             
             col1, col2 = st.columns(2)
             with col1:
-                # AQUÍ ESTABA EL ERROR: Cambié kind="primary" por type="primary"
                 if st.button("✅ Sí, reiniciar", type="primary"):
                     st.session_state.history = [{
                         "role": "assistant",
@@ -493,4 +500,5 @@ def mostrar_tutor():
         st.rerun()
 
 # ── EJECUTAR EL TUTOR ──
-mostrar_tutor()
+# ¡Ojo aquí! Si en tu main.py vas a importar esto, puedes quitar esta llamada de abajo
+# mostrar_tutor()
