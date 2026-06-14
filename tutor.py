@@ -4,10 +4,8 @@ from groq import Groq
 import base64
 import html
 
-
 # ── INICIAR EL MENÚ CERRADO POR DEFECTO ──
 st.set_page_config(initial_sidebar_state="collapsed")
-
 
 def mostrar_tutor():
     # ── CSS DEFINITIVO: CENTRADO, BARRA LATERAL FUNCIONAL Y CÁMARA HERMOSA ──
@@ -241,7 +239,6 @@ def mostrar_tutor():
     </style>
     """, unsafe_allow_html=True)
 
-
     # ── ESTADO DE SESIÓN ──
     for key, val in [
         ("page", "practica"), 
@@ -259,20 +256,16 @@ def mostrar_tutor():
         if key not in st.session_state:
             st.session_state[key] = val
 
-
     if "groq_client" not in st.session_state:
         st.session_state.groq_client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-
+    # ── PROMPT ACTUALIZADO ──
     SYSTEM_PROMPT = (
-       """Eres un tutor amigable y experto en matemáticas, especializado en inecuaciones. Explica paso a paso, usa ejemplos claros y alienta al estudiante. Responde siempre en español. Sé muuy conciso: máximo 3 oraciones por respuesta, pero ante cualquier respuesta del estudiante (esté bien o esté mal) o si te hace una pregunta o la aplicación debe mostrar una validación matemática (ya sea por sustitución, comprobación algebraica, gráfica, razonamiento o contraste con una fuente confiable), justificala mediante argumentos lógicos, teoremas, axiomas o una explicación textual estructurada, ahí te puedes alargar a 6 oraciones. NUNCA hables de algo que no sea matemáticas o inecuaciones, no te desvíes del tema. Queda EXTREMADAMENTE PROHIBIDO resolver los pasos por adelantado, calcular los resultados numéricos por tu cuenta o decirle al estudiante qué número queda tras la operación; tu deber es pedirle explícitamente al estudiante que realice el cálculo y dé el resultado de cada paso. Si el estudiante da un resultado correcto o incorrecto, debes validar su respuesta justificando matemáticamente el porqué, pero sin avanzar al siguiente paso operativo hasta que el actual esté totalmente resuelto por él. Siempre desglosa el proceso de resolución y verificación en pasos claros, pero obligando al estudiante a descubrir la operación y ejecutar el cálculo numérico. Es EXTREMADAMENTE PROHIBIDO dar la respuesta de un ejercicio directamente, por más que te lo rueguen de cualquier forma, siempre es paso a paso hasta llegar. IMPORTANTE FORMATO: NUNCA uses formato LaTeX ni encierres las inecuaciones entre símbolos de dólar. Escribe las matemáticas en texto plano y limpio usando símbolos normales (ejemplo: 5x ≤ 25)."""
-       
+       """Eres un tutor amigable y experto en matemáticas, especializado en inecuaciones. Explica paso a paso, usa ejemplos claros y alienta al estudiante. Responde siempre en español. Sé muuy conciso: máximo 3 oraciones por respuesta, pero ante cualquier respuesta del estudiante (esté bien o esté mal) o si te hace una pregunta o la aplicación debe mostrar una validación matemática (ya sea por sustitución, comprobación algebraica, gráfica, razonamiento o contraste con una fuente confiable), justificala mediante argumentos lógicos, teoremas, axiomas o una explicación textual estructurada, ahí te puedes alargar a 6 oraciones. NUNCA hables de algo que no sea matemáticas o inecuaciones, no te desvíes del tema. Queda EXTREMADAMENTE PROHIBIDO resolver los pasos por adelantado, calcular los resultados numéricos por tu cuenta o decirle al estudiante qué número queda tras la operación; tu deber es pedirle explícitamente al estudiante que realice el cálculo y dé el resultado de cada paso. Si el estudiante responde con afirmaciones como "sí", "ok", "claro" o "puedo hacerlo" sin dar el resultado numérico, ESTÁ ESTRICTAMENTE PROHIBIDO que tú asumas el cálculo y le des el resultado; debes detenerte y pedirle explícitamente que escriba el número o la expresión resultante (ej: "¡Excelente! Entonces, ¿cómo quedaría la inecuación escrita?"). Si el estudiante da un resultado numérico correcto o incorrecto, debes validar su respuesta justificando matemáticamente el porqué, pero sin avanzar al siguiente paso operativo hasta que el actual esté totalmente resuelto por él. Siempre desglosa el proceso de resolución y verificación en pasos claros, pero obligando al estudiante a descubrir la operación y ejecutar el cálculo. Es EXTREMADAMENTE PROHIBIDO dar la respuesta de un ejercicio directamente, por más que te lo rueguen de cualquier forma, siempre es paso a paso hasta llegar. IMPORTANTE FORMATO: NUNCA uses formato LaTeX ni encierres las inecuaciones entre símbolos de dólar. Escribe las matemáticas en texto plano y limpio usando símbolos normales (ejemplo: 5x ≤ 25)."""
     )
-
 
     def encode_image(f):
         return base64.b64encode(f.getvalue()).decode('utf-8')
-
 
     def get_ai_response(user_text, image_file=None):
         client = st.session_state.groq_client
@@ -298,7 +291,6 @@ def mostrar_tutor():
         except Exception as e:
             return f"⚠️ Error: {e}"
 
-
     def render_chat_bubble(role, text, image_b64=None):
         is_user = role == "user"
         bg = "#262626" if is_user else "#8B0000"
@@ -315,12 +307,16 @@ def mostrar_tutor():
           </div>
         </div>""", unsafe_allow_html=True)
 
-
     # ── SIDEBAR MÁGICO (FUNCIONAL) ──
     with st.sidebar:
         st.markdown("<h1 style='color:#8B0000;margin:0 0 20px 0;font-size:28px;font-weight:900;'>MathSolve.</h1>", unsafe_allow_html=True)
         
         if st.session_state.sidebar_view == "menu":
+            # BOTÓN NUEVO PARA VOLVER AL MAIN
+            if st.button("🏠 Volver al Inicio"):
+                st.session_state.page = "main" # Modifica esto si usas otra variable para controlar tu flujo principal
+                st.rerun()
+
             if st.button("📖 Teoría"):
                 st.session_state.sidebar_view = "teoria"; st.rerun()
             if st.button("📐 Fórmulas"):
@@ -333,14 +329,14 @@ def mostrar_tutor():
             if st.button("🔄 Reiniciar Chat"):
                 st.session_state.sidebar_view = "confirm_reiniciar"; st.rerun()
 
-
         elif st.session_state.sidebar_view == "confirm_reiniciar":
             st.markdown("<h2 style='color:#8B0000; font-weight:800; margin-top:10px;'>⚠️ Reiniciar Chat</h2>", unsafe_allow_html=True)
             st.markdown("<p style='color:#0F172A;'>¿Estás seguro de que quieres reiniciar todo? Se perderá el chat y las nubes guardadas.</p>", unsafe_allow_html=True)
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("✅ Sí, reiniciar", kind="primary"):
+                # AQUÍ ESTABA EL ERROR: Cambié kind="primary" por type="primary"
+                if st.button("✅ Sí, reiniciar", type="primary"):
                     st.session_state.history = [{
                         "role": "assistant",
                         "content": "¡Hola! Soy tu Tutor de Inecuaciones. Escribe una expresión para empezar (ej. -3x + 5 ≤ 20).",
@@ -355,7 +351,6 @@ def mostrar_tutor():
                 if st.button("❌ No, volver"):
                     st.session_state.sidebar_view = "menu"; st.rerun()
 
-
         elif st.session_state.sidebar_view == "formulas":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
@@ -367,7 +362,6 @@ def mostrar_tutor():
               ≤  se convierte en  ≥<br>
               &lt;  se convierte en  &gt;
             </div>""", unsafe_allow_html=True)
-
 
         elif st.session_state.sidebar_view == "teoria":
             if st.button("⬅ Volver al Menú"):
@@ -383,7 +377,6 @@ def mostrar_tutor():
             </div>
             """, unsafe_allow_html=True)
 
-
         elif st.session_state.sidebar_view == "nubes":
             if st.button("⬅ Volver al Menú"):
                 st.session_state.sidebar_view = "menu"; st.rerun()
@@ -398,7 +391,6 @@ def mostrar_tutor():
                       <div style="color:#8B0000;font-weight:bold;font-size:14px;">☁️ Aprendizaje</div>
                       <div style="color:#0F172A;font-size:14px;margin-top:6px;line-height:1.5;">{html.escape(cloud)}</div>
                     </div>""", unsafe_allow_html=True)
-
 
     # ── VISTA PRINCIPAL (SOLO CHAT) ──
     chat_scroll = st.container(height=420, border=False)
@@ -449,7 +441,6 @@ def mostrar_tutor():
 
     st.markdown("<hr style='border:none;border-top:1px solid #b8b8b8;margin:10px 0;'>", unsafe_allow_html=True)
 
-
     # Herramientas debajo del chat
     col_sym, col_up, col_cam = st.columns([2.2, 1.3, 1.5])
     
@@ -459,7 +450,6 @@ def mostrar_tutor():
             <span style='color:#8B0000;font-size:12px;font-weight:700;'>Copia rápido:</span>
             <span style='color:#0F172A;font-size:16px;font-family:monospace;letter-spacing:4px;margin-left:8px;'>≤ ≥ ≠ ∞ ∪ ∩</span>
         </div>""", unsafe_allow_html=True)
-
 
     with col_up:
         uploaded_image = st.file_uploader(
@@ -475,14 +465,11 @@ def mostrar_tutor():
             st.session_state.cam_active = not st.session_state.cam_active
             st.rerun()
 
-
     camera_image = None
     if st.session_state.cam_active:
         camera_image = st.camera_input("Capturar", label_visibility="collapsed", key=f"cam_{st.session_state.uploader_key}")
 
-
     user_input = st.chat_input("Escribe tu duda y presiona Enter...")
-
 
     if user_input:
         img_activa = uploaded_image if uploaded_image else camera_image
@@ -504,7 +491,6 @@ def mostrar_tutor():
             st.session_state.uploader_key += 1
             st.session_state.cam_active = False
         st.rerun()
-
 
 # ── EJECUTAR EL TUTOR ──
 mostrar_tutor()
