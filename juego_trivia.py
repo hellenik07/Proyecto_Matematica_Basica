@@ -249,7 +249,7 @@ INECUACIONES = {
                     "num": 1,
                     "descripcion": "Fase 1: El Movimiento Táctico",
                     "expresion_dinamica": r"\frac{-x-10}{x+1} > -x-2",
-                    "expresion": r"\frac{-x-10 - [(-x-2)(x+1)]}{x+1} > 0",
+                    "expresion": r"\frac{-x-10 + [(x+2)(x+1)]}{x+1} > 0",
                     "pregunta": "¿cuál es tu primer paso estratégico?",
                     "opciones": {
                         "A": "Borrar el denominador",
