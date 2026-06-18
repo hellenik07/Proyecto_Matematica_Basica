@@ -117,7 +117,7 @@ INECUACIONES = {
                     "opciones": {
                         "A": "x = 2 y x = 4",
                         "B": "x = −2 y x = −4",
-                        "C": "x = 2 y x = 4"
+                        "C": "x = -2 y x = 4"
                     },
                     "correcta": "A",
                     "ok": "Esquivaste la trampa",
